@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cabo_2" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="430dp"
+        android:background="@drawable/white_list_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik_bold"
+                android:paddingBottom="15dp"
+                android:text="Cabo San Lucas"
+                android:textSize="32sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik_medium"
+                android:paddingBottom="15dp"
+                android:text="Itinerary"
+                android:textSize="23sp" />
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hike up the Pedregal and oogle the
+buildings"
+                android:textAlignment="gravity" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <ImageView
+        android:id="@+id/menu_container"
+        android:layout_width="363dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/menu_container" />
+
+    <Button
+        android:id="@+id/trips_button"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/plane"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/menu_container"
+        app:layout_constraintStart_toStartOf="@+id/menu_container"
+        app:layout_constraintTop_toTopOf="@+id/menu_container"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/list_button"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="64dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/note"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/menu_container"
+        app:layout_constraintStart_toEndOf="@+id/trips_button"
+        app:layout_constraintTop_toTopOf="@+id/menu_container" />
+
+    <Button
+        android:id="@+id/calendar_button"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/calendar"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/menu_container"
+        app:layout_constraintEnd_toStartOf="@+id/profile_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/list_button"
+        app:layout_constraintTop_toTopOf="@+id/menu_container"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/profile_button"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/profile"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/menu_container"
+        app:layout_constraintEnd_toEndOf="@+id/menu_container"
+        app:layout_constraintTop_toTopOf="@+id/menu_container"
+        tools:ignore="TouchTargetSizeCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

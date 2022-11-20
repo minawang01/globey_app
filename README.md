@@ -1,1 +1,0 @@
-# globey_app

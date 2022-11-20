@@ -1,4 +1,4 @@
-package com.example.globeyapp
+package APP_DESIGN_PROJECT.globeyapp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.globeyapp", appContext.packageName)
+        assertEquals("APP_DESIGN_PROJECT.globeyapp", appContext.packageName)
     }
 }

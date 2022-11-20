@@ -4,36 +4,260 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="409dp"
+        android:layout_height="99dp"
+        android:background="@drawable/heading_banner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/Trips_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_corner"
-            android:keepScreenOn="false"
-            android:paddingStart="20pt"
-            android:paddingTop="5pt"
-            android:paddingEnd="20pt"
-            android:paddingBottom="5pt"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto_bold"
             android:text="Trips"
-            android:textAlignment="textStart"
-            android:textColor="#000000"
-            android:textSize="48sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:textColor="@color/black"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.144"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp"></LinearLayout>
+    <ImageView
+        android:id="@+id/menu_container"
+        android:layout_width="363dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/menu_container" />
+
+    <Button
+        android:id="@+id/trips_button"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/plane"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/menu_container"
+        app:layout_constraintStart_toStartOf="@+id/menu_container"
+        app:layout_constraintTop_toTopOf="@+id/menu_container"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/list_button"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="64dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/note"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/menu_container"
+        app:layout_constraintStart_toEndOf="@+id/trips_button"
+        app:layout_constraintTop_toTopOf="@+id/menu_container"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/calendar_button"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/calendar"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/menu_container"
+        app:layout_constraintEnd_toStartOf="@+id/profile_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/list_button"
+        app:layout_constraintTop_toTopOf="@+id/menu_container"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/profile_button"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/profile"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/menu_container"
+        app:layout_constraintEnd_toEndOf="@+id/menu_container"
+        app:layout_constraintTop_toTopOf="@+id/menu_container"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="552dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="362dp"
+                android:layout_height="168dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="25dp"
+                app:cardCornerRadius="13dp"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/cabo">
+
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.950"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.992"
+                        app:srcCompat="@drawable/timing_container" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="74dp"
+                        android:layout_height="20dp"
+                        android:text="5 days"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView"
+                        app:layout_constraintHorizontal_bias="0.6"
+                        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="23dp"
+                        android:layout_height="19dp"
+                        android:layout_marginStart="5dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                        app:layout_constraintEnd_toStartOf="@+id/textView2"
+                        app:layout_constraintStart_toStartOf="@+id/imageView"
+                        app:layout_constraintTop_toTopOf="@+id/imageView"
+                        app:srcCompat="@drawable/clock" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="168dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="25dp"
+                app:cardCornerRadius="13dp">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/tokyo">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.950"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.992"
+                        app:srcCompat="@drawable/timing_container" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="74dp"
+                        android:layout_height="20dp"
+                        android:text="1 month"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                        app:layout_constraintHorizontal_bias="0.6"
+                        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="23dp"
+                        android:layout_height="19dp"
+                        android:layout_marginStart="5dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                        app:layout_constraintEnd_toStartOf="@+id/textView3"
+                        app:layout_constraintStart_toStartOf="@+id/imageView2"
+                        app:layout_constraintTop_toTopOf="@+id/imageView2"
+                        app:srcCompat="@drawable/clock" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+           <!-- <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="168dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="25dp"
+                app:cardCornerRadius="13dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/steve_johnson__zmhynpeqzo_unsplash">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>-->
+
+        </LinearLayout>
+   </ScrollView>
+
+    <!--<ScrollView
+        android:layout_width="414dp"
+        android:layout_height="559dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.593"
+        tools:layout_editor_absoluteX="-2dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="168dp"
+                android:background="@drawable/CABO"></androidx.appcompat.widget.AppCompatButton>
+
+
+        </LinearLayout>
+
+    </ScrollView>-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

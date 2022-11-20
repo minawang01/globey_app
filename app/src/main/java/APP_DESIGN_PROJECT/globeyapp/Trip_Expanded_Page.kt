@@ -1,11 +1,11 @@
-package com.example.globeyapp
+package APP_DESIGN_PROJECT.globeyapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class MainActivity : AppCompatActivity() {
+class Trip_Expanded_Page : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_trip_expanded_page)
     }
 }

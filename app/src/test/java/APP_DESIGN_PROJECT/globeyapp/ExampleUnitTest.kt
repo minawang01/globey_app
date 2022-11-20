@@ -1,4 +1,4 @@
-package com.example.globeyapp
+package APP_DESIGN_PROJECT.globeyapp
 
 import org.junit.Test
 
