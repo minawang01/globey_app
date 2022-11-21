@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import org.json.JSONObject
 
 
 class AddTripActivity: AppCompatActivity() {
@@ -34,7 +35,7 @@ class AddTripActivity: AppCompatActivity() {
         Volley.newRequestQueue(this).add(jsonObjectRequest)
     }
 
-    private fun switchActivity(jsonObjectRequest: JsonObjectRequest) {
+    private fun switchActivity(jsonObject: JSONObject) {
         // switch activity
     }
 
