@@ -29,6 +29,18 @@
             app:layout_constraintHorizontal_bias="0.144"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="44dp"
+            android:layout_height="41dp"
+            android:src="@drawable/add"
+            app:layout_constraintBottom_toBottomOf="@+id/Trips_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.832"
+            app:layout_constraintStart_toEndOf="@+id/Trips_label"
+            app:layout_constraintTop_toTopOf="@+id/Trips_label"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
