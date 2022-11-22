@@ -30,17 +30,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="44dp"
-            android:layout_height="41dp"
+        <ImageButton
+            android:id="@+id/add_trip_btn"
+            android:layout_width="57dp"
+            android:layout_height="55dp"
+            android:backgroundTint="#00FFFFFF"
+            android:scaleType="fitCenter"
             android:src="@drawable/add"
             app:layout_constraintBottom_toBottomOf="@+id/Trips_label"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.832"
+            app:layout_constraintHorizontal_bias="0.831"
             app:layout_constraintStart_toEndOf="@+id/Trips_label"
             app:layout_constraintTop_toTopOf="@+id/Trips_label"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.7" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView

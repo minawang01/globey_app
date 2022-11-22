@@ -6,29 +6,140 @@
     android:layout_height="match_parent"
     tools:context=".add_trip_page">
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:backgroundTint="#80AAAAAA"
-        android:scaleType="centerInside"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/add_image" />
-
-    <ScrollView
-        android:layout_width="409dp"
-        android:layout_height="529dp"
-        android:layout_marginTop="1dp"
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="437dp"
+        android:layout_height="484dp"
+        android:layout_marginBottom="464dp"
+        android:rotationX="-180"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton">
+        app:srcCompat="@drawable/vector" />
 
-        <LinearLayout
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="465dp"
+        android:layout_height="594dp"
+        android:layout_marginBottom="428dp"
+        android:rotationX="-180"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageView9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/vector_2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="77dp"
+        tools:layout_editor_absoluteY="52dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+
+            <EditText
+                android:id="@+id/trip_name"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginTop="24dp"
+
+                android:ems="10"
+                android:fontFamily="@font/roboto_bold"
+                android:inputType="textPersonName"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="Trip Name"
+                android:textAlignment="center"
+                android:textColor="#80070707"
+                android:textSize="34sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.516"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageButton
+                android:id="@+id/add_trip_img_btn"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="42dp"
+                android:background="@drawable/rounded_corner"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/trip_name"
+                app:srcCompat="@drawable/add_image"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <EditText
+                android:id="@+id/editTextDate3"
+                android:layout_width="260dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="30dp"
+                android:ems="10"
+                android:inputType="date"
+                android:text="Start Date"
+                android:textAlignment="center"
+                android:textColor="#80070707"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_trip_img_btn" />
+
+            <EditText
+                android:id="@+id/editTextDate4"
+                android:layout_width="260dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="30dp"
+                android:ems="10"
+                android:inputType="date"
+                android:text="End Date"
+                android:textAlignment="center"
+                android:textColor="#80070707"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextDate3" />
+
+            <ImageButton
+                android:id="@+id/confirm_btn"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="28dp"
+                android:backgroundTint="#B59EC670"
+                android:scaleType="fitCenter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editTextDate4"
+                app:srcCompat="@drawable/confirm"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <ImageButton
+                android:id="@+id/discard_btn"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="28dp"
+                android:backgroundTint="#BAD6493E"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.669"
+                app:layout_constraintStart_toEndOf="@+id/confirm_btn"
+                app:layout_constraintTop_toBottomOf="@+id/editTextDate4"
+                app:srcCompat="@drawable/cancel"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
