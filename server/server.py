@@ -1,43 +1,27 @@
 import flask
 import sqlite3
 from flask import request
+import json
 
 app = flask.Flask(__name__)
 
 #app.config["DEBUG"] = True # Enable debug mode to enable hot-reloader.
-@app.route('/trips')
+@app.route('/trips', methods=["GET", "POST"])
 def trips():
-    """trip_name = request.args.get('trip_name', '')
-    
-    #Connects to the db
-    # The .db file is created automatically if it does not exist
+    print("app route trips working")
     con = sqlite3.connect('globey_app.db')
-
-    if len(trip_name) > 0:
-        # insert into db
-        insertQuery = "INSERT INTO STUDENT (NAME) values (?);"
-        con.execute(insertQuery, (trip_name, ))
+    if request.method == 'POST':
+        print("request method is post")
+        trip = request.get_json()
+        name, loc, start, end = trip["name"], trip["location"], trip["start"], trip["end"]
+        insertQuery = "INSERT INTO TRIPS (NAME, LOCATION, START_DATE, END_DATE) values (?,?,?,?);"
+        con.execute(insertQuery, (name,loc,start,end ))
         con.commit()
 
-    cursor = con.execute("SELECT NAME from STUDENT;")
-    students = []
-    for row in cursor:
-        students.append(row[0])
-    con.close()
-    
-    outdata = {
-        "course_code": "COMP3330",
-        "course_name": "Interactive Mobile Application Design and Programming",
-        "teachers": ["Dr. T.W. Chim", "Mr. C.K. Lai", "Mr. X. Wang"],
-        "students": students
-        }
-    return outdata"""
-    
-    con = sqlite3.connect('globey_app.db') 
     cursor = con.execute("SELECT * from TRIPS;")
     trips = []
     for row in cursor:
-        print(row)
+        print(row)    
         trips.append( {
             "id": row[0],
             "name": row[1],
@@ -46,14 +30,14 @@ def trips():
             "end_date": row[4],
         })
     con.close()
-    
+        
     outdata = {
-        "table": "trips", 
+        "table": "trips",
         "trips": trips
     }
-    return outdata
     
 
+    return outdata
+    
 # adds host="0.0.0.0" to make the server publicly available
 app.run(host="0.0.0.0")
-
