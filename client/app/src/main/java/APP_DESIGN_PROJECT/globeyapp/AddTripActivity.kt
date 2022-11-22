@@ -3,8 +3,8 @@ package APP_DESIGN_PROJECT.globeyapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.Request
@@ -16,8 +16,8 @@ import org.json.JSONObject
 
 class AddTripActivity: AppCompatActivity() {
 
-    private var save_trip_btn: Button? = null
-    private var dont_save_btn: Button? = null
+    private var confirm_btn: ImageButton? = null
+    private var discard_btn: ImageButton? = null
     private var trip_name: EditText? = null
     private var trip_location: EditText? = null
     private var start_date: EditText? = null
@@ -25,9 +25,9 @@ class AddTripActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_trip_expanded_page)
+        setContentView(R.layout.activity_add_trip_page)
 
-        save_trip_btn!!.setOnClickListener {
+        confirm_btn!!.setOnClickListener {
             trip_name = findViewById(R.id.trip_name)
             trip_location = findViewById(R.id.location)
             start_date = findViewById(R.id.start_date)
@@ -51,7 +51,7 @@ class AddTripActivity: AppCompatActivity() {
             sendMessage(postData)
         }
 
-        dont_save_btn!!.setOnClickListener {
+        discard_btn!!.setOnClickListener {
             Log.e("GlobeyApp", "Trip was not saved")
             switchActivity()
         }

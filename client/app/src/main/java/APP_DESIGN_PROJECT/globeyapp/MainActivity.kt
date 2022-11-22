@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.content.Intent
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.SimpleAdapter
 import com.android.volley.Request
@@ -58,8 +59,8 @@ class MainActivity : AppCompatActivity() {
 
                 val adapter = SimpleAdapter(this, list, R.layout.trip_list_item,
                 arrayOf("Name", "Location", "Start", "End", "ID"), intArrayOf(R.id.name, R.id.location, R.id.start, R.id.end, R.id.index))
-                val scroll_view: ScrollView = findViewById(R.id.scroll_view)
-                scroll_view.adapter = adapter
+                //val scroll_view: LinearLayout = findViewById(R.id.trip_layout)
+                //scroll_view.adapter = adapter
             },
             { error ->
                 Log.e("GlobeyApp", error.toString())
