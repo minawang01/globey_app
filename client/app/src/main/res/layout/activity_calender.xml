@@ -4,67 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Trip_Expanded_Page">
-
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="360dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cabo_2" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="430dp"
-        android:background="@drawable/white_list_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="20dp"
-            android:background="@android:color/transparent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/rubik_bold"
-                android:paddingBottom="15dp"
-                android:text="Cabo San Lucas"
-                android:textSize="32sp" />
-
-            <TextView
-                android:id="@+id/count_dwn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/rubik_medium"
-                android:paddingBottom="15dp"
-                android:text="Itinerary"
-                android:textSize="23sp" />
-
-            <CheckBox
-                android:id="@+id/checkBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hike up the Pedregal and oogle the
-buildings"
-                android:textAlignment="gravity" />
-
-        </LinearLayout>
-    </ScrollView>
-
+    tools:context=".calender_">
 
     <ImageView
         android:id="@+id/menu_container"
@@ -101,7 +41,8 @@ buildings"
         app:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/menu_container"
         app:layout_constraintStart_toEndOf="@+id/trips_button"
-        app:layout_constraintTop_toTopOf="@+id/menu_container" />
+        app:layout_constraintTop_toTopOf="@+id/menu_container"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
         android:id="@+id/calendar_button"
@@ -133,17 +74,74 @@ buildings"
         app:layout_constraintBottom_toBottomOf="@+id/menu_container"
         app:layout_constraintEnd_toEndOf="@+id/menu_container"
         app:layout_constraintTop_toTopOf="@+id/menu_container"
-        tools:ignore="TouchTargetSizeCheck" />
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="45dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="16dp"
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="377dp"
+        android:layout_height="337dp"
+        android:dateTextAppearance="@style/TextAppearance.AppCompat.Large"
+        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="274dp" />
+
+    <TextView
+        android:id="@+id/calendar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/rubik_bold"
+        android:text="Calendar"
+        android:textColor="@color/black"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintHorizontal_bias="0.089"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:srcCompat="@drawable/back__1_" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/current_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/rubik_bold"
+        android:shadowColor="#000000"
+        android:text="19"
+        android:textColor="#CA6884"
+        android:textSize="90sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.077"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="54dp" />
+
+    <TextView
+        android:id="@+id/current_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/rubik_medium"
+        android:text="Monday, Sep 2020"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="176dp" />
+
+    <ImageButton
+        android:id="@+id/add_trip_cal_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#00FFFFFF"
+        app:srcCompat="@drawable/add_trip"
+        tools:layout_editor_absoluteX="299dp"
+        tools:layout_editor_absoluteY="24dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="46dp"
+        android:layout_height="43dp"
+        android:backgroundTint="#00FFFFFF"
+        app:srcCompat="@drawable/plus"
+        tools:layout_editor_absoluteX="347dp"
+        tools:layout_editor_absoluteY="24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

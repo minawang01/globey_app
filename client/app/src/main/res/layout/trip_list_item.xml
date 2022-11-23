@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="362dp"
+        android:layout_height="168dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="25dp"
+        app:cardCornerRadius="13dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/img_placeholder">
+
+
+            <ImageView
+                android:id="@+id/timing_ctr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.950"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.992"
+                app:srcCompat="@drawable/timing_container" />
+
+            <TextView
+                android:id="@+id/count_dwn"
+                android:layout_width="74dp"
+                android:layout_height="20dp"
+                android:text="5 days"
+                app:layout_constraintBottom_toBottomOf="@+id/timing_ctr"
+                app:layout_constraintEnd_toEndOf="@+id/timing_ctr"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintTop_toTopOf="@+id/timing_ctr" />
+
+            <ImageView
+                android:id="@+id/clock"
+                android:layout_width="23dp"
+                android:layout_height="19dp"
+                android:layout_marginStart="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/timing_ctr"
+                app:layout_constraintEnd_toStartOf="@+id/count_dwn"
+                app:layout_constraintStart_toStartOf="@+id/timing_ctr"
+                app:layout_constraintTop_toTopOf="@+id/timing_ctr"
+                app:srcCompat="@drawable/clock" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
