@@ -115,19 +115,13 @@
         app:layout_constraintTop_toTopOf="@+id/menu_container"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
-    <ScrollView
-        android:id="@+id/scroll_view"
+    <ListView
+        android:id="@+id/trip_view"
         android:layout_width="match_parent"
         android:layout_height="552dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"/>
 
-        <LinearLayout
-            android:id="@+id/trip_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"/>
-   </ScrollView>
 
     <!--<ScrollView
         android:layout_width="414dp"

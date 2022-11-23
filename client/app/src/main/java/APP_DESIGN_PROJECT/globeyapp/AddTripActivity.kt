@@ -8,7 +8,6 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.Request
-import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import org.json.JSONException
 import org.json.JSONObject
@@ -23,7 +22,6 @@ class AddTripActivity: AppCompatActivity() {
     private var start_date: EditText? = null
     private var end_date: EditText? = null
     private var trip_img: ImageButton? = null
-    private var count_dwn:Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +33,7 @@ class AddTripActivity: AppCompatActivity() {
             start_date = findViewById(R.id.start_date)
             end_date = findViewById(R.id.end_date)
             trip_img = findViewById(R.id.add_trip_img_btn)
-            //Todo: Get the time left till start date of the trip and assgn to count_dwn variable, JodaTime may be able and makes it simple
-            //count_dwn
+            //Todo: Will do this in the activity_main part
 
             val name: String = trip_name!!.text.toString()
             val location: String = trip_location!!.text.toString()
@@ -63,7 +60,6 @@ class AddTripActivity: AppCompatActivity() {
     }
 
     private fun sendMessage(trip: JSONObject) {
-        var queue: RequestQueue = Volley.newRequestQueue(this)
         val url:String =  "http://10.0.2.2:5000/trips"
 
         val jsonObjectRequest = JsonObjectRequest(
