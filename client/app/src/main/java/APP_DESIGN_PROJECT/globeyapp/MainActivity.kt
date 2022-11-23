@@ -1,12 +1,11 @@
 package APP_DESIGN_PROJECT.globeyapp
 
+import APP_DESIGN_PROJECT.globeyapp.tools.Trips
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.content.Intent
-import android.widget.ListView
-import android.widget.SimpleAdapter
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -14,31 +13,22 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    private var add_trip_btn: Button? = null
+    private var button: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        populateTripData()
 
-        add_trip_btn = findViewById(R.id.add_trip_btn)
-        add_trip_btn!!.setOnClickListener {
+        button = findViewById(R.id.button)
+        button!!.setOnClickListener {
             Log.e("GlobeyApp", "Add trip button was clicked")
-            switchToAddTrip()
+            switchToTrips()
         }
-
     }
 
-    private fun switchToAddTrip() {
-        val intent = Intent(this, AddTripActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun populateTripData() {
+    private fun switchToTrips() {
         var queue: RequestQueue = Volley.newRequestQueue(this)
         val url = "http://10.0.2.2:5000/trips"
 
@@ -48,21 +38,17 @@ class MainActivity : AppCompatActivity() {
                 Log.e("GlobeyApp", "response was successful")
 
                 val jsonArray:JSONArray = response.get("trips") as JSONArray
-                val list = arrayListOf<MutableMap<String, Any>>()
-                for (i in 0 until jsonArray.length()) {
-                    val tripmap: JSONObject = jsonArray.get(i) as JSONObject
-                    val map: MutableMap<String, Any> = HashMap()
-                    map["Name"] = tripmap.get("name")
-                    map["Location"] = tripmap.get("location")
-                    map["Countdown"] = "${getCountdown(tripmap.get(" start_date ") as String)} days"
-                    //map["End"] = tripmap.get("end_date")
-                    //map["ID"] = tripmap.get("id")
+                var tripList = arrayListOf<Trips>()
+                for (i in 0 until jsonArray.length()){
+                    var map: JSONObject = jsonArray.get(i) as JSONObject
+                    Log.e("tag", map.get("name") as String)
+                    val trip = Trips(map.get("name") as String, map.get("location") as String, map.get("start_date") as String, map.get("end_date") as String)
+                    tripList.add(trip)
                 }
-
-                val adapter = SimpleAdapter(this, list, R.layout.trip_list_item,
-                arrayOf("Name", "Location", "Countdown"), intArrayOf(R.id.trip_name, R.id.trip_location, R.id.count_dwn))
-                val list_view: ListView = findViewById(R.id.trip_view)
-                list_view.adapter = adapter
+                val intent = Intent(this, TripsActivity::class.java)
+                val data: ArrayList<Trips> = tripList
+                intent.putParcelableArrayListExtra("trips", data)
+                startActivity(intent)
             },
             { error ->
                 Log.e("GlobeyApp", error.toString())
@@ -72,14 +58,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun getCountdown(date:String):Long {
-        val dateArray = date.split("/")
-        val startDate = Date(dateArray[2] as Int, dateArray[1] as Int, dateArray[0] as Int)
-        val startDateMillis = startDate.time
-        val cal = Calendar.getInstance()
-        val currentDate = cal.timeInMillis
-        val diff:Long = startDateMillis - currentDate
-        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
-    }
+
 
 }

@@ -1,5 +1,6 @@
 package APP_DESIGN_PROJECT.globeyapp
 
+import APP_DESIGN_PROJECT.globeyapp.tools.Trips
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,9 +9,12 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.Request
+import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.ArrayList
 
 
 class AddTripActivity: AppCompatActivity() {
@@ -26,6 +30,8 @@ class AddTripActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_trip_page)
+        confirm_btn = findViewById(R.id.confirm_btn)
+        discard_btn = findViewById(R.id.discard_btn)
 
         confirm_btn!!.setOnClickListener {
             trip_name = findViewById(R.id.trip_name)
@@ -33,7 +39,6 @@ class AddTripActivity: AppCompatActivity() {
             start_date = findViewById(R.id.start_date)
             end_date = findViewById(R.id.end_date)
             trip_img = findViewById(R.id.add_trip_img_btn)
-            //Todo: Will do this in the activity_main part
 
             val name: String = trip_name!!.text.toString()
             val location: String = trip_location!!.text.toString()
@@ -60,13 +65,24 @@ class AddTripActivity: AppCompatActivity() {
     }
 
     private fun sendMessage(trip: JSONObject) {
-        val url:String =  "http://10.0.2.2:5000/trips"
+        val url =  "http://10.0.2.2:5000/trips"
 
         val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST, url, trip, {
-                response ->
+            Request.Method.POST, url, trip, { response ->
                 Log.e("GlobeyApp", "Post was successful")
-                switchActivity()
+
+                val jsonArray: JSONArray = response.get("trips") as JSONArray
+                var tripList = arrayListOf<Trips>()
+                for (i in 0 until jsonArray.length()){
+                    var map: JSONObject = jsonArray.get(i) as JSONObject
+                    Log.e("tag", map.get("name") as String)
+                    val trip = Trips(map.get("name") as String, map.get("location") as String, map.get("start_date") as String, map.get("end_date") as String)
+                    tripList.add(trip)
+                }
+                val intent = Intent(this, TripsActivity::class.java)
+                val data: ArrayList<Trips> = tripList
+                intent.putParcelableArrayListExtra("trips", data)
+                startActivity(intent)
             },
             { error ->
                 Log.e("GlobeyApp", error.toString())
@@ -76,7 +92,30 @@ class AddTripActivity: AppCompatActivity() {
     }
 
     private fun switchActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        var queue: RequestQueue = Volley.newRequestQueue(this)
+        val url = "http://10.0.2.2:5000/trips"
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET, url, null, {
+                    response ->
+                Log.e("GlobeyApp", "response was successful")
+
+                val jsonArray:JSONArray = response.get("trips") as JSONArray
+                var tripList = arrayListOf<Trips>()
+                for (i in 0 until jsonArray.length()){
+                    var map: JSONObject = jsonArray.get(i) as JSONObject
+                    Log.e("tag", map.get("name") as String)
+                    val trip = Trips(map.get("name") as String, map.get("location") as String, map.get("start") as String, map.get("end") as String)
+                    tripList.add(trip)
+                }
+                val intent = Intent(this, TripsActivity::class.java)
+                val data: ArrayList<Trips> = tripList
+                intent.putParcelableArrayListExtra("trips", data)
+                startActivity(intent)
+            },
+            { error ->
+                Log.e("GlobeyApp", error.toString())
+            }
+        )
+        queue.add(jsonObjectRequest)
     }
 }
