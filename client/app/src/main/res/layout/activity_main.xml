@@ -33,6 +33,12 @@
     </ScrollView>-->
 
     <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="250dp"
         android:layout_height="100dp"
@@ -40,7 +46,7 @@
         android:layout_marginTop="200dp"
         android:layout_marginEnd="80dp"
         android:layout_marginBottom="431dp"
-        android:foreground="@drawable/GLOBEY"
+        android:foreground="@drawable/globey"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

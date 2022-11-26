@@ -1,45 +1,49 @@
 package APP_DESIGN_PROJECT.globeyapp
 
+import APP_DESIGN_PROJECT.globeyapp.tools.RecyclerViewAdapter
 import APP_DESIGN_PROJECT.globeyapp.tools.Trips
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.content.Intent
-import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.SimpleAdapter
+import android.os.Parcelable
+import android.view.View
+import android.widget.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.HashMap
 
-class TripsActivity : AppCompatActivity() {
+class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener {
     private var add_trip_btn: ImageButton? = null
+    private lateinit var adapter: RecyclerViewAdapter
+    private lateinit var tripList: ArrayList<Trips>
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trips)
 
-        val tripList = intent.getParcelableArrayListExtra<Trips>("trips")
-        val list = arrayListOf<MutableMap<String, String>>()
-        for(trip in tripList!!) {
-            val map: MutableMap<String, String> = HashMap()
-            map["Name"] = trip.name.toString()
-            map["Location"] = trip.location.toString()
-            map["Countdown"] = "${getCountdown(trip!!.start!!)} day(s)"
-            list.add(map)
+        tripList = intent.getParcelableArrayListExtra("trips")!!
+        adapter = RecyclerViewAdapter(this, tripList)
 
-        }
-
-        val adapter = SimpleAdapter(this, list, R.layout.trip_list_item,
-            arrayOf("Name", "Location", "Countdown"), intArrayOf(R.id.trip_name, R.id.trip_location, R.id.count_dwn))
-        val list_view: ListView = findViewById(R.id.trip_view)
-        list_view.adapter = adapter
+        val recyclerView: RecyclerView = findViewById(R.id.trip_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter.setClickListener(this)
+        recyclerView.adapter = adapter
 
         add_trip_btn = findViewById(R.id.add_trip_btn)
         add_trip_btn!!.setOnClickListener {
             Log.e("GlobeyApp", "Add trip button was clicked")
             switchToAddTrip()
         }
+
     }
 
     private fun switchToAddTrip() {
@@ -54,6 +58,39 @@ class TripsActivity : AppCompatActivity() {
         val cal = Calendar.getInstance()
         val currentDate = cal.timeInMillis
         val diff:Long = startDateMillis - currentDate
-        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+        return TimeUnit.MILLISECONDS.toDays(diff);
+    }
+
+    override fun onItemClick(view: View?, position: Int) {
+        val trip: Trips = adapter.getItem(position)
+        val intent = Intent(this, TripExpandedActivity::class.java)
+        intent.putExtra("trip", trip)
+        startActivity(intent)
+    }
+
+    override fun onDeleteBtnClick(view: View?, position: Int) {
+        deleteTripFromDatabase(position)
+    }
+
+    private fun deleteTripFromDatabase(id: Int) {
+        var queue: RequestQueue = Volley.newRequestQueue(this)
+        val postData = JSONObject()
+        try {
+            postData.put("id", id)
+        } catch(e : Exception) {
+            Log.e("GlobeyApp", e.toString())
+        }
+        val url = "http://10.0.2.2:5000/delete_trips"
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST, url, postData, { _ ->
+                Log.e("GlobeyApp", "response was successful")
+                tripList.removeAt(id)
+                adapter.notifyItemRemoved(id)
+            },
+            { error ->
+                Log.e("GlobeyApp", error.toString())
+            }
+        )
+        queue.add(jsonObjectRequest)
     }
 }
