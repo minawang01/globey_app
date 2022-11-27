@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Globey App</string>
+    <string name="trip_name_goes_here">Trip Name Goes Here</string>
+    <string name="delete">Delete</string>
+    <string name="todo">TODO</string>
 </resources>

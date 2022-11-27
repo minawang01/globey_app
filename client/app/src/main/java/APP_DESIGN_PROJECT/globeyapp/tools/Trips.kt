@@ -3,14 +3,16 @@ package APP_DESIGN_PROJECT.globeyapp.tools
 import android.os.Parcel
 import android.os.Parcelable
 
-class Trips(val id: Int, val name: String?, val location: String?, val start: String?, private val end:String?) :
+class Trips(val id: Int, val name: String?, val location: String?, val start: String?,
+            private val end:String?, val uri: String?) :
     Parcelable {
     constructor(parcel: Parcel) : this(
         id = parcel.readInt(),
         name = parcel.readString(),
         location = parcel.readString(),
         start = parcel.readString(),
-        end = parcel.readString()
+        end = parcel.readString(),
+        uri = parcel.readString(),
     ) {
     }
 
@@ -24,6 +26,7 @@ class Trips(val id: Int, val name: String?, val location: String?, val start: St
         p0?.writeString(location)
         p0?.writeString(start)
         p0?.writeString(end)
+        p0?.writeString(uri)
     }
 
     companion object CREATOR : Parcelable.Creator<Trips> {

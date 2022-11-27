@@ -31,7 +31,7 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
         setContentView(R.layout.activity_trips)
 
         tripList = intent.getParcelableArrayListExtra("trips")!!
-        adapter = RecyclerViewAdapter(this, tripList)
+        adapter = RecyclerViewAdapter(this, tripList, this.contentResolver)
 
         val recyclerView: RecyclerView = findViewById(R.id.trip_view)
         recyclerView.layoutManager = LinearLayoutManager(this)

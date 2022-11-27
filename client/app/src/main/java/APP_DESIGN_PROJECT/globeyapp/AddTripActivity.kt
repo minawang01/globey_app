@@ -35,6 +35,7 @@ class AddTripActivity: AppCompatActivity(){
     private var start_date: EditText? = null
     private var end_date: EditText? = null
     private var trip_img: ImageButton? = null
+    private var img_uri: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +71,7 @@ class AddTripActivity: AppCompatActivity(){
                 postData.put("location", location)
                 postData.put("start", start)
                 postData.put("end", end)
+                postData.put("uri", img_uri)
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
@@ -92,10 +94,17 @@ class AddTripActivity: AppCompatActivity(){
 
                 val jsonArray: JSONArray = response.get("trips") as JSONArray
                 var tripList = arrayListOf<Trips>()
+
                 for (i in 0 until jsonArray.length()){
                     var map: JSONObject = jsonArray.get(i) as JSONObject
                     Log.e("tag", map.get("name") as String)
-                    val trip = Trips(map.get("id") as Int, map.get("name") as String, map.get("location") as String, map.get("start_date") as String, map.get("end_date") as String)
+                    var uri: String? = null
+                    if(map.get("img_uri") != "null") {
+                        uri = map.get("img_uri").toString()
+                    }
+                    val trip = Trips(map.get("id") as Int, map.get("name") as String,
+                        map.get("location") as String, map.get("start_date") as String,
+                        map.get("end_date") as String, uri)
                     tripList.add(trip)
                 }
                 val intent = Intent(this, TripsActivity::class.java)
@@ -123,7 +132,13 @@ class AddTripActivity: AppCompatActivity(){
                 for (i in 0 until jsonArray.length()){
                     var map: JSONObject = jsonArray.get(i) as JSONObject
                     Log.e("tag", map.get("name") as String)
-                    val trip = Trips(map.get("id") as Int, map.get("name") as String, map.get("location") as String, map.get("start") as String, map.get("end") as String)
+                    var uri: String? = null
+                    if(map.get("img_uri") != "null") {
+                        uri = map.get("img_uri").toString()
+                    }
+                    val trip = Trips(map.get("id") as Int, map.get("name") as String,
+                        map.get("location") as String, map.get("start_date") as String, map.get("end_date") as String,
+                        uri)
                     tripList.add(trip)
                 }
                 val intent = Intent(this, TripsActivity::class.java)
@@ -152,6 +167,7 @@ class AddTripActivity: AppCompatActivity(){
             val data: Intent? = result.data
             if (data != null && data.data != null) {
                 val selectedImageUri: Uri? = data.data
+                img_uri = selectedImageUri.toString()
                 val selectedImageBitmap: Bitmap
                 try {
                     selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
