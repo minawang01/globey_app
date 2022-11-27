@@ -52,10 +52,13 @@ class MainActivity : AppCompatActivity() {
                 for (i in 0 until jsonArray.length()){
                     var map: JSONObject = jsonArray.get(i) as JSONObject
                     Log.e("tag", map.get("name") as String)
+                    var uri: String? = null
+                    if(map.get("img_uri") != "null") {
+                        uri = map.get("img_uri").toString()
+                    }
                     Log.e("tag", "${ map.get("img_uri") }")
-                    //val uri = map.get("img_uri") as String
                     val trip = Trips(map.get("id") as Int, map.get("name") as String, map.get("location") as String,
-                        map.get("start_date") as String, map.get("end_date") as String, null)
+                        map.get("start_date") as String, map.get("end_date") as String, uri)
                     tripList.add(trip)
                 }
                 val intent = Intent(this, TripsActivity::class.java)
