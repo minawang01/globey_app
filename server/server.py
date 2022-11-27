@@ -35,9 +35,36 @@ def trips():
         "table": "trips",
         "trips": trips
     }
-    
-
     return outdata
-    
+   
+@app.route('/delete_trips', methods=["POST"])
+def delete_trips():
+    print("app route delete_trips working")
+    con = sqlite3.connect("globey_app.db")
+    print("request method is post")
+    pos_json = request.get_json()
+    position = pos_json["id"]
+    deleteQuery = "DELETE FROM TRIPS WHERE ID=?;"
+    con.execute(deleteQuery, (position,))
+    con.commit()
+       
+    cursor = con.execute("SELECT * from TRIPS;")
+    trips = []
+    for row in cursor:  
+        trips.append( {
+            "id": row[0],
+            "name": row[1],
+            "location": row[2],
+            "start_date": row[3],
+            "end_date": row[4],
+        })
+    con.close()
+        
+    outdata = {
+        "table": "trips",
+        "trips": trips
+    }
+    return outdata 
+
 # adds host="0.0.0.0" to make the server publicly available
 app.run(host="0.0.0.0")

@@ -115,7 +115,16 @@
         app:layout_constraintTop_toTopOf="@+id/menu_container"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
-    <ListView
+<!--    <ListView-->
+<!--        android:id="@+id/trip_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="552dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">-->
+
+<!--    </ListView>-->
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trip_view"
         android:layout_width="match_parent"
         android:layout_height="552dp"
