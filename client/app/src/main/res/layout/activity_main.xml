@@ -33,45 +33,58 @@
     </ScrollView>-->
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/app_name"
         android:layout_width="250dp"
         android:layout_height="100dp"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="168dp"
         android:layout_marginEnd="80dp"
-        android:layout_marginBottom="431dp"
-        android:foreground="@drawable/GLOBEY"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="-5dp"
+        android:fontFamily="@font/sansita"
+        android:text="GLOBEY"
+        android:textAlignment="center"
+        android:textSize="77sp"
+        app:layout_constraintBottom_toTopOf="@id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="158dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="159dp"
         android:text="Trips"
+        android:textAlignment="center"
         app:layout_constrainedHeight="false"
+        app:layout_constraintBottom_toTopOf="@+id/front_pg_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/app_name" />
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/palm_tree_imgs"
+        android:layout_width="236dp"
+        android:layout_height="583dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/palm_trees" />
+
+    <ImageView
+        android:id="@+id/front_pg_img"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="31dp"
+        android:layout_height="380dp"
         android:foreground="@drawable/bar_design"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
-
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

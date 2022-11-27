@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.content.Intent
+import android.graphics.Color
+import android.widget.TextView
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -13,15 +15,23 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+import com.captaindroid.tvg.Tvg
 
 class MainActivity : AppCompatActivity() {
 
     private var button: Button? = null
+    private lateinit var title: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         button = findViewById(R.id.button)
+        title = findViewById(R.id.app_name)
+
+        Tvg.change(title, Color.parseColor("#CA6884"),  Color.parseColor("#8AE9C1"));
+
+
         button!!.setOnClickListener {
             Log.e("GlobeyApp", "Add trip button was clicked")
             switchToTrips()
