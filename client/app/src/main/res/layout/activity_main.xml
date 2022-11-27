@@ -33,12 +33,6 @@
     </ScrollView>-->
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
         android:id="@+id/app_name"
         android:layout_width="250dp"
         android:layout_height="100dp"
