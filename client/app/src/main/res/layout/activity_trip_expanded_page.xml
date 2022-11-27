@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Trip_Expanded_Page">
+    tools:context=".TripExpandedActivity">
 
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/trip_image_2"
         android:layout_width="match_parent"
         android:layout_height="360dp"
         android:scaleType="centerCrop"
@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3">
+        app:layout_constraintTop_toBottomOf="@+id/trip_image_2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/trip_name_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/rubik_bold"
@@ -55,7 +55,7 @@
                 android:textSize="23sp" />
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/list_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hike up the Pedregal and oogle the
@@ -136,14 +136,14 @@ buildings"
         tools:ignore="TouchTargetSizeCheck" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/back_btn"
         android:layout_width="45dp"
         android:layout_height="39dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/trip_image_2"
         app:srcCompat="@drawable/back__1_" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

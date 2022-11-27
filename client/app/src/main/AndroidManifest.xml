@@ -30,7 +30,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Trip_Expanded_Page"
+            android:name=".TripExpandedActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
