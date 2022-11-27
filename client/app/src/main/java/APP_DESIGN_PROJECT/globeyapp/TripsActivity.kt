@@ -72,11 +72,12 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
         deleteTripFromDatabase(position)
     }
 
-    private fun deleteTripFromDatabase(id: Int) {
+    private fun deleteTripFromDatabase(position: Int) {
         var queue: RequestQueue = Volley.newRequestQueue(this)
+        val trip: Trips = adapter.getItem(position)
         val postData = JSONObject()
         try {
-            postData.put("id", id)
+            postData.put("id", trip.id)
         } catch(e : Exception) {
             Log.e("GlobeyApp", e.toString())
         }
@@ -84,8 +85,8 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST, url, postData, { _ ->
                 Log.e("GlobeyApp", "response was successful")
-                tripList.removeAt(id)
-                adapter.notifyItemRemoved(id)
+                tripList.removeAt(position)
+                adapter.notifyItemRemoved(position)
             },
             { error ->
                 Log.e("GlobeyApp", error.toString())

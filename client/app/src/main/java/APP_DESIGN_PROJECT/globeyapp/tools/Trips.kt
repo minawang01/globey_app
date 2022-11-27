@@ -3,9 +3,10 @@ package APP_DESIGN_PROJECT.globeyapp.tools
 import android.os.Parcel
 import android.os.Parcelable
 
-class Trips(val name: String?, val location: String?, val start: String?, private val end:String?) :
+class Trips(val id: Int, val name: String?, val location: String?, val start: String?, private val end:String?) :
     Parcelable {
     constructor(parcel: Parcel) : this(
+        id = parcel.readInt(),
         name = parcel.readString(),
         location = parcel.readString(),
         start = parcel.readString(),
@@ -18,6 +19,7 @@ class Trips(val name: String?, val location: String?, val start: String?, privat
     }
 
     override fun writeToParcel(p0: Parcel?, p1: Int) {
+        p0?.writeInt(id)
         p0?.writeString(name)
         p0?.writeString(location)
         p0?.writeString(start)
