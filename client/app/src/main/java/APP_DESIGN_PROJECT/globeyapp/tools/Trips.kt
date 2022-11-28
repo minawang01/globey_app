@@ -20,13 +20,13 @@ class Trips(val id: Int, val name: String?, val location: String?, val start: St
         return 0
     }
 
-    override fun writeToParcel(p0: Parcel?, p1: Int) {
-        p0?.writeInt(id)
-        p0?.writeString(name)
-        p0?.writeString(location)
-        p0?.writeString(start)
-        p0?.writeString(end)
-        p0?.writeString(uri)
+    override fun writeToParcel(p0: Parcel, p1: Int) {
+        p0.writeInt(id)
+        p0.writeString(name)
+        p0.writeString(location)
+        p0.writeString(start)
+        p0.writeString(end)
+        p0.writeString(uri)
     }
 
     companion object CREATOR : Parcelable.Creator<Trips> {

@@ -1,12 +1,12 @@
 package APP_DESIGN_PROJECT.globeyapp
 
+import APP_DESIGN_PROJECT.globeyapp.tools.Notes
 import APP_DESIGN_PROJECT.globeyapp.tools.RecyclerViewAdapter
 import APP_DESIGN_PROJECT.globeyapp.tools.Trips
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.content.Intent
-import android.os.Parcelable
 import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +19,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
 
 class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener {
     private var add_trip_btn: ImageButton? = null
@@ -62,14 +61,15 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
     }
 
     override fun onItemClick(view: View?, position: Int) {
-        val trip: Trips = adapter.getItem(position)
-        val intent = Intent(this, TripExpandedActivity::class.java)
-        intent.putExtra("trip", trip)
-        startActivity(intent)
+        getNotesFromDatabase(position)
     }
 
     override fun onDeleteBtnClick(view: View?, position: Int) {
         deleteTripFromDatabase(position)
+    }
+
+    override fun onImgBtnClick(view: View?, position: Int) {
+        getNotesFromDatabase(position)
     }
 
     private fun deleteTripFromDatabase(position: Int) {
@@ -92,6 +92,39 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
                 Log.e("GlobeyApp", error.toString())
             }
         )
+        queue.add(jsonObjectRequest)
+    }
+
+    private fun getNotesFromDatabase(position: Int) {
+        var queue: RequestQueue = Volley.newRequestQueue(this)
+        val trip: Trips = adapter.getItem(position)
+        val postData = JSONObject()
+        try {
+            postData.put("id", trip.id)
+        } catch(e :Exception) {
+            Log.e("GlobeyApp", e.toString())
+        }
+        var url = "http://10.0.2.2:5000/notes"
+        val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, url, postData, {
+            response ->
+            Log.i("GlobeyApp", "response was successful")
+            val jsonArray:JSONArray = response.get("notes") as JSONArray
+
+            var noteList = arrayListOf<Notes>()
+            for (i in 0 until jsonArray.length()){
+                var map: JSONObject = jsonArray.get(i) as JSONObject
+                val note = Notes(map.get("id") as Int, map.get("timestamp") as String, map.get("text") as String)
+                noteList.add(note)
+            }
+            val intent = Intent(this, TripExpandedActivity::class.java)
+            val data: ArrayList<Notes> = noteList
+            intent.putParcelableArrayListExtra("notes", data)
+            intent.putExtra("uri", trip.uri)
+            intent.putExtra("id", trip.id)
+            startActivity(intent)
+        }, { error ->
+                Log.e("GlobeyApp", error.toString())
+            })
         queue.add(jsonObjectRequest)
     }
 }

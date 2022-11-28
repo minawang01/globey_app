@@ -15,6 +15,13 @@ con.execute("""CREATE TABLE IF NOT EXISTS TRIPS (
     IMG_URI TEXT
     );""")
 
+con.execute("""CREATE TABLE IF NOT EXISTS NOTES (
+    TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ID INTEGER NOT NULL,
+    NOTE TEXT NOT NULL,
+    FOREIGN KEY(ID) REFERENCES TRIPS(ID)
+);""")
+
 # insert test data
 testData = [
     {
@@ -32,6 +39,7 @@ testData = [
         "img_uri": None
     },
 ]
+
 for trip in testData:
     name, loc, start, end, uri = trip["name"], trip["location"], trip["start_date"], trip["end_date"], trip["img_uri"]
     insertQuery = "INSERT INTO TRIPS (NAME, LOCATION, START_DATE, END_DATE, IMG_URI) values (?, ?, ?, ?, ?);"

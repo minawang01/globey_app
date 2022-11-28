@@ -51,16 +51,24 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/rubik_medium"
                 android:paddingBottom="15dp"
-                android:text="Itinerary"
+                android:text="Notes"
                 android:textSize="23sp" />
 
-            <CheckBox
-                android:id="@+id/list_item"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/notes_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <EditText
+                android:id="@+id/add_note"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hike up the Pedregal and oogle the
-buildings"
-                android:textAlignment="gravity" />
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp" />
 
         </LinearLayout>
     </ScrollView>
@@ -135,15 +143,16 @@ buildings"
         app:layout_constraintTop_toTopOf="@+id/menu_container"
         tools:ignore="TouchTargetSizeCheck" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/back_btn"
         android:layout_width="45dp"
         android:layout_height="39dp"
         android:layout_marginTop="16dp"
+        android:background="#071B0F0F"
+        android:foreground="@drawable/back__1_"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/trip_image_2"
-        app:srcCompat="@drawable/back__1_" />
+        app:layout_constraintTop_toTopOf="@+id/trip_image_2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

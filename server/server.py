@@ -89,7 +89,78 @@ def change_trip():
             "img_uri": row[5]
         })
     con.close()
+
+@app.route("/notes", methods=["POST", "GET"])
+def get_notes():
+    con = sqlite3.connect("globey_app.db")
     
+    json = request.get_json()
+    position = json["id"]
+    query = "SELECT * from NOTES WHERE ID=?;"
+    cursor = con.execute(query, (position,))
+    notes = []
+    for row in cursor:
+        notes.append({
+            "timestamp": row[0],
+            "id": row[1],
+            "text": row[2]  
+        })
+        
+    con.close()
+        
+    outdata = {
+        "table": "notes",
+        "notes": notes
+    }
+    return outdata
+
+@app.route("/add_notes", methods=["POST"])
+def add_notes():
+    con = sqlite3.connect("globey_app.db")
+    json = request.get_json()
+    position = json["id"]
+    text = json["text"]
+    query = "INSERT INTO NOTES (ID, NOTE) values (?,?);"
+    con.execute(query, (position, text))
+    con.commit()
+    cursor = con.execute("SELECT * FROM NOTES WHERE TIMESTAMP = (SELECT MAX(TIMESTAMP) FROM NOTES);")
+    print(cursor)
+    for row in cursor:
+        print(row)
+        notes = {
+            "timestamp": row[0],
+            "id": row[1],
+            "text": row[2]
+        }
+    print(notes)
+    con.close()
+    outdata = {
+            "table": "notes",
+            "notes": notes
+        }
+    return outdata
+
+@app.route("/edit_notes", methods=["POST"])
+def edit_notes():
+    con = sqlite3.connect("globey_app.db")
+    json = request.get_json()
+    position = json["id"]
+    text = json["text"]
+    timestamp = json["timestamp"]
+    query = "UPDATE NOTES SET NOTE=? WHERE ID=? AND TIMESTAMP=?;"
+    con.execute(query, (text, position, timestamp))
+    notes = {
+        "timestamp": timestamp,
+        "id": id,
+        "text": text
+    }
+        
+    con.close()
+    outdata = {
+            "table": "notes",
+            "notes": notes
+        }
+    return outdata  
     
 
 # adds host="0.0.0.0" to make the server publicly available
