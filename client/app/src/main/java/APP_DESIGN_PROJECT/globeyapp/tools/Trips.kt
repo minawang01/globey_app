@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Trips(val id: Int, val name: String?, val location: String?, val start: String?,
-            private val end:String?, val uri: String?) :
+            val end:String?, val uri: String?) :
     Parcelable {
     constructor(parcel: Parcel) : this(
         id = parcel.readInt(),

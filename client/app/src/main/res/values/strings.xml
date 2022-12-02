@@ -3,4 +3,11 @@
     <string name="trip_name_goes_here">Trip Name Goes Here</string>
     <string name="delete">Delete</string>
     <string name="todo">TODO</string>
+    <string name="start_value">trip start date</string>
+    <string name="start_date">Start Date:</string>
+    <string name="end_date">End Date</string>
+    <string name="todo2">TODO</string>
+    <string name="location">Location:</string>
+    <string name="notes">Notes</string>
+    <string name="details">Details</string>
 </resources>

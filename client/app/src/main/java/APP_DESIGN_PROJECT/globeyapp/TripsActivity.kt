@@ -121,10 +121,9 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
             }
             val intent = Intent(this, TripExpandedActivity::class.java)
             val data: ArrayList<Notes> = noteList
+            val trip = adapter.getItem(position)
             intent.putParcelableArrayListExtra("notes", data)
-            intent.putExtra("uri", trip.uri)
-            intent.putExtra("id", trip.id)
-            intent.putExtra("trip_name", trip.name)
+            intent.putExtra("trip", trip)
             startActivity(intent)
         }, { error ->
                 Log.e("GlobeyApp", error.toString())

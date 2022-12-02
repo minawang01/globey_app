@@ -71,27 +71,30 @@ def delete_trips():
     }
     return outdata
 
-@app.route("/change_trip", methods=["POST"])
+@app.route("/edit_trip", methods=["POST"])
 def change_trip():
     print("app route change_trips working")
     con = sqlite3.connect("globey_app.db")
     json = request.get_json()
+    trip_id = json["trip_id"]
+    text = json["text"]
+    element = json["element"]
     
-    #create code to change trip
+    query = "UPDATE TRIPS SET "+element +"=? WHERE ID=?;"
+    con.execute(query, (text, trip_id,))
+    con.commit()
     
-    
-    cursor = con.execute("SELECT * from TRIPS;")
-    trips = []
-    for row in cursor:  
-        trips.append( {
-            "id": row[0],
-            "name": row[1],
-            "location": row[2],
-            "start_date": row[3],
-            "end_date": row[4],
-            "img_uri": row[5]
-        })
+    query = "SELECT * FROM TRIPS WHERE ID=?;"
+    cursor = con.execute(query, (trip_id,))
+    row = cursor.fetchall()
+    trip = {
+        "id": row[0][0],
+        "trip_id": row[0][1],
+        "note": row[0][2],
+        "updated_time": row[0][3] 
+    }
     con.close()
+    return trip
 
 @app.route("/notes", methods=["POST", "GET"])
 def get_notes():
@@ -149,12 +152,6 @@ def edit_notes():
     json = request.get_json()
     note = json["text"]
     note_id = json["note_id"]
-    print(note)
-    print(note_id)
-    query = "SELECT * FROM NOTES WHERE ID=?;"
-    cursor = con.execute(query, (note_id,))
-    row = cursor.fetchall()
-    print(row[0])
     query = "UPDATE NOTES SET NOTE=? WHERE ID=?;"
     con.execute(query, (note, note_id,))
     query = "UPDATE NOTES SET UPDATED_TIME=CURRENT_TIMESTAMP WHERE ID=?;"
@@ -174,9 +171,25 @@ def edit_notes():
             "table": "notes",
             "notes": notes
         }
-    print(outdata["notes"])
     return outdata  
     
 
+@app.route("/delete_notes", methods=["POST"])
+def delete_notes():
+    con = sqlite3.connect("globey_app.db")
+    json = request.get_json()
+    note_id = json["note_id"]
+    query = "DELETE FROM NOTES WHERE ID=?;"
+    con.execute(query, (note_id,))
+    con.commit()
+    con.close()
+    outdata = {
+        "table":"notes",
+        "success": True
+    }
+    return outdata
+    
+    
+    
 # adds host="0.0.0.0" to make the server publicly available
 app.run(host="0.0.0.0")
