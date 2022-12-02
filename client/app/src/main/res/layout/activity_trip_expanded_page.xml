@@ -37,12 +37,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/trip_name_2"
+                android:id="@+id/trip_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/rubik_bold"
                 android:paddingBottom="15dp"
-                android:text="Cabo San Lucas"
                 android:textSize="32sp" />
 
             <TextView

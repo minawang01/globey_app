@@ -3,12 +3,13 @@ package APP_DESIGN_PROJECT.globeyapp.tools
 import android.os.Parcel
 import android.os.Parcelable
 
-class Notes(var id: Int, var timestamp: String?, var text: String?): Parcelable {
+class Notes(val id: Int, val trip_id: Int, var updated_time: String?, var note: String?): Parcelable {
 
     constructor(parcel: Parcel) : this(
         id = parcel.readInt(),
-        timestamp = parcel.readString(),
-        text = parcel.readString()
+        trip_id = parcel.readInt(),
+        updated_time = parcel.readString(),
+        note = parcel.readString()
     ) {
     }
 
@@ -18,8 +19,9 @@ class Notes(var id: Int, var timestamp: String?, var text: String?): Parcelable 
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest?.writeInt(id)
-        dest?.writeString(timestamp)
-        dest?.writeString(text)
+        dest?.writeInt(trip_id)
+        dest?.writeString(updated_time)
+        dest?.writeString(note)
     }
 
 

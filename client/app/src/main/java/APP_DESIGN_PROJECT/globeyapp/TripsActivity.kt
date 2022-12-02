@@ -113,7 +113,10 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
             var noteList = arrayListOf<Notes>()
             for (i in 0 until jsonArray.length()){
                 var map: JSONObject = jsonArray.get(i) as JSONObject
-                val note = Notes(map.get("id") as Int, map.get("timestamp") as String, map.get("text") as String)
+                val note = Notes(map.get("id") as Int, map.get("trip_id") as Int, map.get("updated_time") as String,
+                    map.get("note") as String
+
+                )
                 noteList.add(note)
             }
             val intent = Intent(this, TripExpandedActivity::class.java)
@@ -121,6 +124,7 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
             intent.putParcelableArrayListExtra("notes", data)
             intent.putExtra("uri", trip.uri)
             intent.putExtra("id", trip.id)
+            intent.putExtra("trip_name", trip.name)
             startActivity(intent)
         }, { error ->
                 Log.e("GlobeyApp", error.toString())

@@ -48,6 +48,9 @@ def delete_trips():
     deleteQuery = "DELETE FROM TRIPS WHERE ID=?;"
     con.execute(deleteQuery, (position,))
     con.commit()
+    deleteQuery = "DELETE FROM NOTES WHERE ID=?;"
+    con.execute(deleteQuery, (position,))
+    con.commit()
        
     cursor = con.execute("SELECT * from TRIPS;")
     trips = []
@@ -93,17 +96,17 @@ def change_trip():
 @app.route("/notes", methods=["POST", "GET"])
 def get_notes():
     con = sqlite3.connect("globey_app.db")
-    
     json = request.get_json()
-    position = json["id"]
-    query = "SELECT * from NOTES WHERE ID=?;"
-    cursor = con.execute(query, (position,))
+    trip_id = json["id"]
+    query = "SELECT * from NOTES WHERE TRIP_ID=?;"
+    cursor = con.execute(query, (trip_id,))
     notes = []
     for row in cursor:
         notes.append({
-            "timestamp": row[0],
-            "id": row[1],
-            "text": row[2]  
+            "id": row[0],
+            "trip_id": row[1],
+            "note": row[2],
+            "updated_time": row[3]
         })
         
     con.close()
@@ -118,20 +121,20 @@ def get_notes():
 def add_notes():
     con = sqlite3.connect("globey_app.db")
     json = request.get_json()
-    position = json["id"]
-    text = json["text"]
-    query = "INSERT INTO NOTES (ID, NOTE) values (?,?);"
-    con.execute(query, (position, text))
+    trip_id = json["id"]
+    note = json["text"]
+    print(trip_id, note)
+    query = "INSERT INTO NOTES (TRIP_ID, NOTE) values (?,?);"
+    con.execute(query, (trip_id, note))
     con.commit()
-    cursor = con.execute("SELECT * FROM NOTES WHERE TIMESTAMP = (SELECT MAX(TIMESTAMP) FROM NOTES);")
-    print(cursor)
-    for row in cursor:
-        print(row)
-        notes = {
-            "timestamp": row[0],
-            "id": row[1],
-            "text": row[2]
-        }
+    cursor = con.execute("SELECT * FROM NOTES WHERE ID = (SELECT MAX(ID) FROM NOTES);")
+    row = cursor.fetchall()
+    notes = {
+        "id": row[0][0],
+        "trip_id": row[0][1],
+        "note": row[0][2],
+        "updated_time": row[0][3]
+    } 
     print(notes)
     con.close()
     outdata = {
@@ -144,22 +147,34 @@ def add_notes():
 def edit_notes():
     con = sqlite3.connect("globey_app.db")
     json = request.get_json()
-    position = json["id"]
-    text = json["text"]
-    timestamp = json["timestamp"]
-    query = "UPDATE NOTES SET NOTE=? WHERE ID=? AND TIMESTAMP=?;"
-    con.execute(query, (text, position, timestamp))
+    note = json["text"]
+    note_id = json["note_id"]
+    print(note)
+    print(note_id)
+    query = "SELECT * FROM NOTES WHERE ID=?;"
+    cursor = con.execute(query, (note_id,))
+    row = cursor.fetchall()
+    print(row[0])
+    query = "UPDATE NOTES SET NOTE=? WHERE ID=?;"
+    con.execute(query, (note, note_id,))
+    query = "UPDATE NOTES SET UPDATED_TIME=CURRENT_TIMESTAMP WHERE ID=?;"
+    con.execute(query, (note_id,))
+    con.commit()
+    query = "SELECT * FROM NOTES WHERE ID=?;"
+    cursor = con.execute(query, (note_id,))
+    row = cursor.fetchall()
     notes = {
-        "timestamp": timestamp,
-        "id": id,
-        "text": text
+        "id": row[0][0],
+        "trip_id": row[0][1],
+        "note": row[0][2],
+        "updated_time": row[0][3]
     }
-        
     con.close()
     outdata = {
             "table": "notes",
             "notes": notes
         }
+    print(outdata["notes"])
     return outdata  
     
 

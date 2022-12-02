@@ -34,8 +34,8 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull NoteRecyclerViewAdapter.ViewHolder holder, int position) {
-        Notes trip = notes.get(position);
-        holder.text.setText(trip.getText());
+        Notes note = notes.get(position);
+        holder.text.setText(note.getNote());
     }
 
     @Override
@@ -44,7 +44,7 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnFocusChangeListener {
-        EditText text;
+        public EditText text;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,7 +54,7 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            focusChangeListener.onFocusChange(v, getBindingAdapterPosition(), hasFocus);
+            focusChangeListener.onFocusChange(v, getBindingAdapterPosition(), hasFocus, text);
         }
     }
 
@@ -63,7 +63,7 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
     }
 
     public interface FocusChangeListener {
-        void onFocusChange(View view, int position, boolean hasFocus);
+        void onFocusChange(View view, int position, boolean hasFocus, EditText text);
     }
 
     public Notes getItem(int id) {
