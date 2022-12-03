@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.content.Intent
+import android.os.Build
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -23,14 +25,15 @@ import java.util.concurrent.TimeUnit
 class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener {
     private var add_trip_btn: ImageButton? = null
     private lateinit var adapter: RecyclerViewAdapter
-    private lateinit var tripList: ArrayList<Trips>
+    private var tripList: ArrayList<Trips>? = null
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trips)
 
-        tripList = intent.getParcelableArrayListExtra("trips")!!
-        adapter = RecyclerViewAdapter(this, tripList, this.contentResolver)
+        tripList = intent.getParcelableArrayListExtra("trips", Trips::class.java)!!
+        adapter = RecyclerViewAdapter(this, tripList!!, this.contentResolver)
 
         val recyclerView: RecyclerView = findViewById(R.id.trip_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -85,7 +88,7 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST, url, postData, { _ ->
                 Log.e("GlobeyApp", "response was successful")
-                tripList.removeAt(position)
+                tripList?.removeAt(position)
                 adapter.notifyItemRemoved(position)
             },
             { error ->

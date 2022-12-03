@@ -4,23 +4,27 @@ import APP_DESIGN_PROJECT.globeyapp.tools.NoteRecyclerViewAdapter
 import APP_DESIGN_PROJECT.globeyapp.tools.Notes
 import APP_DESIGN_PROJECT.globeyapp.tools.Trips
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
+import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 import kotlin.collections.ArrayList
 
 
@@ -33,6 +37,8 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
     private lateinit var location: EditText
     private lateinit var start: EditText
     private lateinit var end: EditText
+    private lateinit var expandedTripImg: ImageView
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +48,9 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
         location = findViewById(R.id.location_expanded)
         start = findViewById(R.id.start_expanded)
         end = findViewById(R.id.end_expanded)
+        expandedTripImg = findViewById(R.id.trip_image_2)
+
+
 
         noteList = intent.getParcelableArrayListExtra("notes", Notes::class.java)!!
         val trip = intent.getParcelableExtra("trip", Trips::class.java)!!
@@ -58,6 +67,7 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
         location.setText(trip.location)
         start.setText(trip.start)
         end.setText(trip.end)
+        trip.file_path?.let { retrieveFromStorage(expandedTripImg, it) }
 
         edittext.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
@@ -91,8 +101,17 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
         backBtn = findViewById(R.id.back_btn)
 
         backBtn.setOnClickListener {
-            val i = Intent(this, TripsActivity::class.java)
-            startActivity(i)
+            switchToTrips()
+        }
+    }
+
+    private fun retrieveFromStorage(tripImg: ImageView, file_path: String) {
+        try {
+            val f = File(file_path)
+            val b: Bitmap = BitmapFactory.decodeStream(FileInputStream(f))
+            tripImg.setImageBitmap(b)
+        } catch(e: FileNotFoundException) {
+            Log.e("GlobeyApp", e.printStackTrace().toString())
         }
     }
 
@@ -199,6 +218,41 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
             }
         )
         Volley.newRequestQueue(this).add(jsonObjectRequest)
+    }
+
+    private fun switchToTrips() {
+        var queue: RequestQueue = Volley.newRequestQueue(this)
+        val url = "http://10.0.2.2:5000/trips"
+
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET, url, null, {
+                    response ->
+                Log.e("GlobeyApp", "response was successful")
+
+                val jsonArray: JSONArray = response.get("trips") as JSONArray
+                var tripList = arrayListOf<Trips>()
+                for (i in 0 until jsonArray.length()){
+                    var map: JSONObject = jsonArray.get(i) as JSONObject
+                    Log.e("tag", map.get("name") as String)
+                    var file_path: String? = null
+                    if(map.get("file_path") != "null") {
+                        file_path = map.get("file_path").toString()
+                    }
+                    val trip = Trips(map.get("id") as Int, map.get("name") as String, map.get("location") as String,
+                        map.get("start_date") as String, map.get("end_date") as String, file_path)
+                    tripList.add(trip)
+                }
+                val intent = Intent(this, TripsActivity::class.java)
+                val data: java.util.ArrayList<Trips> = tripList
+                intent.putParcelableArrayListExtra("trips", data)
+                startActivity(intent)
+            },
+            { error ->
+                Log.e("GlobeyApp", error.toString())
+            }
+        )
+        queue.add(jsonObjectRequest)
+
     }
 
     override fun onFocusChange(view: View?, position: Int, hasFocus: Boolean, textField:EditText) {

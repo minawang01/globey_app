@@ -135,9 +135,9 @@ class AddTripActivity: AppCompatActivity() {
                 for (i in 0 until jsonArray.length()) {
                     var map: JSONObject = jsonArray.get(i) as JSONObject
                     Log.e("tag", map.get("name") as String)
-                    var uri: String? = null
-                    if (map.get("img_uri") != "null") {
-                        uri = map.get("img_uri").toString()
+                    var file_path: String? = null
+                    if (map.get("file_path") != "null") {
+                        file_path = map.get("file_path").toString()
                     }
                     val trip = Trips(
                         map.get("id") as Int,
@@ -145,7 +145,7 @@ class AddTripActivity: AppCompatActivity() {
                         map.get("location") as String,
                         map.get("start_date") as String,
                         map.get("end_date") as String,
-                        uri
+                        file_path
                     )
                     tripList.add(trip)
                 }
