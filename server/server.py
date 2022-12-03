@@ -13,9 +13,9 @@ def trips():
     if request.method == 'POST':
         print("request method is post")
         trip = request.get_json()
-        name, loc, start, end, uri = trip["name"], trip["location"], trip["start"], trip["end"], trip["uri"]
-        insertQuery = "INSERT INTO TRIPS (NAME, LOCATION, START_DATE, END_DATE, IMG_URI) values (?,?,?,?,?);"
-        con.execute(insertQuery, (name,loc,start,end, uri))
+        name, loc, start, end, file_path = trip["name"], trip["location"], trip["start"], trip["end"], trip["file_path"]
+        insertQuery = "INSERT INTO TRIPS (NAME, LOCATION, START_DATE, END_DATE, FILE_PATH) values (?,?,?,?,?);"
+        con.execute(insertQuery, (name,loc,start,end, file_path))
         con.commit()
 
     cursor = con.execute("SELECT * from TRIPS;")
@@ -28,7 +28,7 @@ def trips():
             "location": row[2],
             "start_date": row[3],
             "end_date": row[4],
-            "img_uri": row[5]
+            "file_path": row[5]
         })
     con.close()
         
@@ -51,23 +51,11 @@ def delete_trips():
     deleteQuery = "DELETE FROM NOTES WHERE ID=?;"
     con.execute(deleteQuery, (position,))
     con.commit()
-       
-    cursor = con.execute("SELECT * from TRIPS;")
-    trips = []
-    for row in cursor:  
-        trips.append( {
-            "id": row[0],
-            "name": row[1],
-            "location": row[2],
-            "start_date": row[3],
-            "end_date": row[4],
-            "img_uri": row[5]
-        })
     con.close()
         
     outdata = {
         "table": "trips",
-        "trips": trips
+        "sucess": True
     }
     return outdata
 

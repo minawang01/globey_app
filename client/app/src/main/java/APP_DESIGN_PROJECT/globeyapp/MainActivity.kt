@@ -15,7 +15,6 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
-//import com.captaindroid.tvg.Tvg
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,9 +27,6 @@ class MainActivity : AppCompatActivity() {
 
         button = findViewById(R.id.button)
         title = findViewById(R.id.app_name)
-
-        //Tvg.change(title, Color.parseColor("#CA6884"),  Color.parseColor("#8AE9C1"));
-
 
         button!!.setOnClickListener {
             Log.e("GlobeyApp", "Add trip button was clicked")
@@ -52,13 +48,12 @@ class MainActivity : AppCompatActivity() {
                 for (i in 0 until jsonArray.length()){
                     var map: JSONObject = jsonArray.get(i) as JSONObject
                     Log.e("tag", map.get("name") as String)
-                    var uri: String? = null
-                    if(map.get("img_uri") != "null") {
-                        uri = map.get("img_uri").toString()
+                    var file_path: String? = null
+                    if(map.get("file_path") != "null") {
+                        file_path = map.get("file_path").toString()
                     }
-                    Log.e("tag", "${ map.get("img_uri") }")
                     val trip = Trips(map.get("id") as Int, map.get("name") as String, map.get("location") as String,
-                        map.get("start_date") as String, map.get("end_date") as String, uri)
+                        map.get("start_date") as String, map.get("end_date") as String, file_path)
                     tripList.add(trip)
                 }
                 val intent = Intent(this, TripsActivity::class.java)

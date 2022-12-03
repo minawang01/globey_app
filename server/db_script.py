@@ -12,7 +12,7 @@ con.execute("""CREATE TABLE IF NOT EXISTS TRIPS (
     LOCATION TEXT NOT NULL,
     START_DATE TEXT NOT NULL,
     END_DATE TEXT NOT NULL,
-    IMG_URI TEXT
+    FILE_PATH TEXT
     );""")
 
 con.execute("""CREATE TABLE IF NOT EXISTS NOTES (
@@ -30,20 +30,20 @@ testData = [
         "location": "Cabo",
         "start_date": "04/07/2022",
         "end_date": "11/07/2022",
-        "img_uri": None
+        "file_path": None
     },
     {
         "name": "Spring Break Trip",
         "location": "Athens, Greece",
         "start_date": "08/03/2023",
         "end_date": "20/03/2023",
-        "img_uri": None
+        "file_path": None
     },
 ]
 
 for trip in testData:
-    name, loc, start, end, uri = trip["name"], trip["location"], trip["start_date"], trip["end_date"], trip["img_uri"]
-    insertQuery = "INSERT INTO TRIPS (NAME, LOCATION, START_DATE, END_DATE, IMG_URI) values (?, ?, ?, ?, ?);"
+    name, loc, start, end, uri = trip["name"], trip["location"], trip["start_date"], trip["end_date"], trip["file_path"]
+    insertQuery = "INSERT INTO TRIPS (NAME, LOCATION, START_DATE, END_DATE, FILE_PATH) values (?, ?, ?, ?, ?);"
     con.execute(insertQuery, (name, loc, start, end, uri))
  
 con.commit()

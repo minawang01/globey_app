@@ -6,8 +6,10 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +18,12 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.IOException
 
 class RecyclerViewAdapter(context: Context?, data: List<Trips>, cr: ContentResolver):
@@ -42,11 +48,21 @@ class RecyclerViewAdapter(context: Context?, data: List<Trips>, cr: ContentResol
         val trip = mData[position]
         holder.location.text = trip.location
         holder.name.text = trip.name
+        trip.file_path?.let { retrieveFromStorage(holder.imgBtn, it) }
     }
-
 
     override fun getItemCount(): Int {
         return mData.size
+    }
+
+    private fun retrieveFromStorage(imgBtn: ImageButton, file_path: String) {
+        try {
+            val f = File(file_path)
+            val b: Bitmap = BitmapFactory.decodeStream(FileInputStream(f))
+            imgBtn.setImageBitmap(b)
+        } catch(e:FileNotFoundException) {
+            Log.e("GlobeyApp", e.printStackTrace().toString())
+        }
     }
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),

@@ -45,7 +45,6 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
 
         noteList = intent.getParcelableArrayListExtra("notes", Notes::class.java)!!
         val trip = intent.getParcelableExtra("trip", Trips::class.java)!!
-        val uri = trip.uri
         val trip_id = trip.id
 
         adapter = NoteRecyclerViewAdapter(this, noteList)

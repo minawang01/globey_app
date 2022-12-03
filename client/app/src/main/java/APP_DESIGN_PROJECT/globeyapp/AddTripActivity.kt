@@ -1,6 +1,8 @@
 package APP_DESIGN_PROJECT.globeyapp
 
 import APP_DESIGN_PROJECT.globeyapp.tools.Trips
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -19,14 +21,18 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.util.ArrayList
 
 
-class AddTripActivity: AppCompatActivity(){
+class AddTripActivity: AppCompatActivity() {
+
 
     private var confirm_btn: ImageButton? = null
     private var discard_btn: ImageButton? = null
@@ -35,7 +41,7 @@ class AddTripActivity: AppCompatActivity(){
     private var start_date: EditText? = null
     private var end_date: EditText? = null
     private var trip_img: ImageButton? = null
-    private var img_uri: String? = null
+    private var file_path: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +51,7 @@ class AddTripActivity: AppCompatActivity(){
         trip_img = findViewById(R.id.add_trip_img_btn)
 
         trip_img?.bringToFront()
-        trip_img?.setOnClickListener{
-            Toast.makeText(this@AddTripActivity,
-                "The favorite list would appear on clicking this icon",
-                Toast.LENGTH_SHORT).show()
+        trip_img?.setOnClickListener {
             imageChooser()
         }
         trip_img?.scaleType = ImageView.ScaleType.CENTER
@@ -71,22 +74,21 @@ class AddTripActivity: AppCompatActivity(){
                 postData.put("location", location)
                 postData.put("start", start)
                 postData.put("end", end)
-                postData.put("uri", img_uri)
+                postData.put("file_path", file_path)
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
-
             sendMessage(postData)
         }
 
         discard_btn!!.setOnClickListener {
-            Log.e("GlobeyApp", "Trip was not saved")
+            Log.i("GlobeyApp", "Trip was not saved")
             switchActivity()
         }
     }
 
     private fun sendMessage(trip: JSONObject) {
-        val url =  "http://10.0.2.2:5000/trips"
+        val url = "http://10.0.2.2:5000/trips"
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST, url, trip, { response ->
@@ -95,16 +97,18 @@ class AddTripActivity: AppCompatActivity(){
                 val jsonArray: JSONArray = response.get("trips") as JSONArray
                 var tripList = arrayListOf<Trips>()
 
-                for (i in 0 until jsonArray.length()){
+                for (i in 0 until jsonArray.length()) {
                     var map: JSONObject = jsonArray.get(i) as JSONObject
                     Log.e("tag", map.get("name") as String)
-                    var uri: String? = null
-                    if(map.get("img_uri") != "null") {
-                        uri = map.get("img_uri").toString()
+                    var file_path: String? = null
+                    if (map.get("file_path") != "null") {
+                        file_path = map.get("file_path").toString()
                     }
-                    val trip = Trips(map.get("id") as Int, map.get("name") as String,
+                    val trip = Trips(
+                        map.get("id") as Int, map.get("name") as String,
                         map.get("location") as String, map.get("start_date") as String,
-                        map.get("end_date") as String, uri)
+                        map.get("end_date") as String, file_path
+                    )
                     tripList.add(trip)
                 }
                 val intent = Intent(this, TripsActivity::class.java)
@@ -123,22 +127,26 @@ class AddTripActivity: AppCompatActivity(){
         var queue: RequestQueue = Volley.newRequestQueue(this)
         val url = "http://10.0.2.2:5000/trips"
         val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET, url, null, {
-                    response ->
+            Request.Method.GET, url, null, { response ->
                 Log.e("GlobeyApp", "response was successful")
 
-                val jsonArray:JSONArray = response.get("trips") as JSONArray
+                val jsonArray: JSONArray = response.get("trips") as JSONArray
                 var tripList = arrayListOf<Trips>()
-                for (i in 0 until jsonArray.length()){
+                for (i in 0 until jsonArray.length()) {
                     var map: JSONObject = jsonArray.get(i) as JSONObject
                     Log.e("tag", map.get("name") as String)
                     var uri: String? = null
-                    if(map.get("img_uri") != "null") {
+                    if (map.get("img_uri") != "null") {
                         uri = map.get("img_uri").toString()
                     }
-                    val trip = Trips(map.get("id") as Int, map.get("name") as String,
-                        map.get("location") as String, map.get("start_date") as String, map.get("end_date") as String,
-                        uri)
+                    val trip = Trips(
+                        map.get("id") as Int,
+                        map.get("name") as String,
+                        map.get("location") as String,
+                        map.get("start_date") as String,
+                        map.get("end_date") as String,
+                        uri
+                    )
                     tripList.add(trip)
                 }
                 val intent = Intent(this, TripsActivity::class.java)
@@ -160,24 +168,49 @@ class AddTripActivity: AppCompatActivity(){
         launchSomeActivity.launch(i)
     }
 
-    var launchSomeActivity = registerForActivityResult<Intent, ActivityResult>(
-        ActivityResultContracts.StartActivityForResult()) {
-            result: ActivityResult ->
+    private var launchSomeActivity = registerForActivityResult<Intent, ActivityResult>(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
             val data: Intent? = result.data
             if (data != null && data.data != null) {
                 val selectedImageUri: Uri? = data.data
-                img_uri = selectedImageUri.toString()
                 val selectedImageBitmap: Bitmap
                 try {
                     selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
                     trip_img?.setImageBitmap(selectedImageBitmap)
+                    file_path = saveToInternalStorage(selectedImageBitmap, selectedImageUri.toString())
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
             }
-}
+        }
     }
+
+    private fun createFileName(uri:String):String {
+        val strings = uri.split("%")
+        return strings[strings.size - 1]
+    }
+
+    private fun saveToInternalStorage(bitmap:Bitmap, uri:String):String {
+        val root_dir: File = ContextWrapper(applicationContext).getDir("imageDir", Context.MODE_PRIVATE)
+        val fp = File(root_dir,createFileName(uri))
+        var fos: FileOutputStream? = null
+        try {
+            fos = FileOutputStream(fp)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+        } catch (e: Exception) {
+            Log.e("GlobeyApp", e.printStackTrace().toString())
+
+        } finally {
+            try {
+                fos?.close()
+            } catch (e:IOException) {
+                Log.e("GlobeyApp", e.printStackTrace().toString())
+            }
+        }
+        return fp.toString()
+    }
+
 }
 

@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Trips(val id: Int, val name: String?, val location: String?, val start: String?,
-            val end:String?, val uri: String?) :
+            val end:String?, val file_path: String?) :
     Parcelable {
     constructor(parcel: Parcel) : this(
         id = parcel.readInt(),
@@ -12,7 +12,7 @@ class Trips(val id: Int, val name: String?, val location: String?, val start: St
         location = parcel.readString(),
         start = parcel.readString(),
         end = parcel.readString(),
-        uri = parcel.readString(),
+        file_path = parcel.readString(),
     ) {
     }
 
@@ -26,7 +26,7 @@ class Trips(val id: Int, val name: String?, val location: String?, val start: St
         p0.writeString(location)
         p0.writeString(start)
         p0.writeString(end)
-        p0.writeString(uri)
+        p0.writeString(file_path)
     }
 
     companion object CREATOR : Parcelable.Creator<Trips> {
