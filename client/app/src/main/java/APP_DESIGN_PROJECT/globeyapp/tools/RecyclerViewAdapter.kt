@@ -1,14 +1,10 @@
 package APP_DESIGN_PROJECT.globeyapp.tools
 
 import APP_DESIGN_PROJECT.globeyapp.R
-import APP_DESIGN_PROJECT.globeyapp.TripsActivity
 import android.content.ContentResolver
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,27 +12,29 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
-import java.io.IOException
 
-class RecyclerViewAdapter(context: Context?, data: List<Trips>, cr: ContentResolver):
+class RecyclerViewAdapter(context: Context, data: List<Trips>, cr: ContentResolver):
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
     private val mData: List<Trips>
     private val mInflater: LayoutInflater
     private var mClickListener: ItemClickListener? = null
     private val contentResolver: ContentResolver
+    private val mContext: Context
 
     init {
         mInflater = LayoutInflater.from(context)
         mData = data
         contentResolver = cr
+        mContext = context
+    }
+
+    companion object {
+        val DEFAULT_LOCATION = "Location"
+        val DEFAULT_NAME = "Untitled Trip"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,9 +44,14 @@ class RecyclerViewAdapter(context: Context?, data: List<Trips>, cr: ContentResol
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val trip = mData[position]
-        holder.location.text = trip.location
-        holder.name.text = trip.name
-        trip.file_path?.let { retrieveFromStorage(holder.imgBtn, it) }
+        holder.location.text = trip.location ?: DEFAULT_LOCATION
+        holder.name.text = trip.name ?: DEFAULT_NAME
+        if (trip.file_path.isNullOrBlank()) {
+            setDefaultImage(holder.imgBtn, mContext, this.contentResolver)
+        } else {
+            retrieveFromStorage(holder.imgBtn, trip.file_path)
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -62,6 +65,7 @@ class RecyclerViewAdapter(context: Context?, data: List<Trips>, cr: ContentResol
             imgBtn.setImageBitmap(b)
         } catch(e:FileNotFoundException) {
             Log.e("GlobeyApp", e.printStackTrace().toString())
+            setDefaultImage(imgBtn, mContext, this.contentResolver)
         }
     }
 
@@ -85,22 +89,10 @@ class RecyclerViewAdapter(context: Context?, data: List<Trips>, cr: ContentResol
             }
 
             override fun onClick(view: View) {
-                if (view.id == delete.id) {
-                    if (mClickListener != null) mClickListener!!.onDeleteBtnClick(
-                        view,
-                        bindingAdapterPosition
-                    )
-                } else if(view.id == imgBtn.id) {
-                    if (mClickListener != null) mClickListener!!.onImgBtnClick(
-                        view,
-                        bindingAdapterPosition
-                    )
-
-                } else {
-                    if (mClickListener != null) mClickListener!!.onItemClick(
-                        view,
-                        bindingAdapterPosition
-                    )
+                when(view.id) {
+                    delete.id -> mClickListener?.onDeleteBtnClick(view, bindingAdapterPosition)
+                    imgBtn.id -> mClickListener?.onImgBtnClick(view, bindingAdapterPosition)
+                    else -> mClickListener?.onItemClick(view, bindingAdapterPosition)
                 }
             }
         }

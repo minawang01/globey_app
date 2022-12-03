@@ -1,7 +1,6 @@
 package APP_DESIGN_PROJECT.globeyapp
 
-import APP_DESIGN_PROJECT.globeyapp.tools.Trips
-import APP_DESIGN_PROJECT.globeyapp.tools.checkDateValidity
+import APP_DESIGN_PROJECT.globeyapp.tools.*
 import android.content.ContentResolver
 import android.content.Context
 import android.content.ContextWrapper
@@ -16,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.toolbox.JsonObjectRequest
@@ -34,17 +34,13 @@ import java.util.ArrayList
 class AddTripActivity: AppCompatActivity(){
 
 
-    private var confirm_btn: ImageButton? = null
-    private var discard_btn: ImageButton? = null
+    private lateinit var confirm_btn: ImageButton
+    private lateinit var discard_btn: ImageButton
     private lateinit var trip_name: EditText
     private lateinit var trip_location: EditText
     private lateinit var start_date: EditText
     private lateinit var end_date: EditText
-    private var trip_img: ImageButton? = null
-    private var img_uri: String? = null
-    private var clicked: Boolean = false
-    private lateinit var selectedImageUri: Uri
-    private lateinit var selectedImageBitmap: Bitmap
+    private lateinit var trip_img: ImageButton
     private var file_path: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,42 +50,29 @@ class AddTripActivity: AppCompatActivity(){
         discard_btn = findViewById(R.id.discard_btn)
         trip_img = findViewById(R.id.add_trip_img_btn)
 
-        trip_img?.bringToFront()
-        trip_img?.setOnClickListener{
-            imageChooser()
+        trip_img.bringToFront()
+        trip_img.setOnClickListener{
+            imageChooser(launchSomeActivity)
         }
 
-        if(!clicked){
-            selectedImageUri = Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(R.drawable.trip_placeholder))
-                .appendPath(resources.getResourceTypeName(R.drawable.trip_placeholder))
-                .appendPath(resources.getResourceEntryName(R.drawable.trip_placeholder))
-                .build()
+        trip_img.scaleType = ImageView.ScaleType.CENTER
 
-            selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
-            trip_img?.setImageBitmap(selectedImageBitmap)
-        }
-
-        trip_img?.scaleType = ImageView.ScaleType.CENTER
-
-        confirm_btn!!.setOnClickListener {
+        confirm_btn.setOnClickListener {
             trip_name = findViewById(R.id.trip_name)
             trip_location = findViewById(R.id.location)
             start_date = findViewById(R.id.start_date)
             end_date = findViewById(R.id.end_date)
 
 
-            val name: String = trip_name.text.toString()
-            val location: String = trip_location.text.toString()
-            val start: String = start_date.text.toString()
-            val end: String = end_date.text.toString()
+            val name: String = trip_name.text.toString().trim()
+            val location: String = trip_location.text.toString().trim()
+            val start: String = start_date.text.toString().trim()
+            val end: String = end_date.text.toString().trim()
 
             if (!checkDateValidity(start)) {
-                Toast.makeText(this.applicationContext, "Format of date must be DD/MM/YYYY", Toast.LENGTH_SHORT)
-
+                Toast.makeText(this.applicationContext, "Format of date must be DD/MM/YYYY", Toast.LENGTH_SHORT).show()
             } else if (!checkDateValidity(end)) {
-
+                Toast.makeText(this.applicationContext, "Format of date must be DD/MM/YYYY", Toast.LENGTH_SHORT).show()
             } else {
                 val postData = JSONObject()
                 try {
@@ -105,7 +88,7 @@ class AddTripActivity: AppCompatActivity(){
             }
         }
 
-        discard_btn!!.setOnClickListener {
+        discard_btn.setOnClickListener {
             Log.i("GlobeyApp", "Trip was not saved")
             switchActivity()
         }
@@ -124,14 +107,14 @@ class AddTripActivity: AppCompatActivity(){
                 for (i in 0 until jsonArray.length()) {
                     var map: JSONObject = jsonArray.get(i) as JSONObject
                     Log.e("tag", map.get("name") as String)
-                    var file_path: String? = null
+                    var fp: String? = null
                     if (map.get("file_path") != "null") {
-                        file_path = map.get("file_path").toString()
+                        fp = map.get("file_path").toString()
                     }
                     val trip = Trips(
                         map.get("id") as Int, map.get("name") as String,
                         map.get("location") as String, map.get("start_date") as String,
-                        map.get("end_date") as String, file_path
+                        map.get("end_date") as String, fp
                     )
                     tripList.add(trip)
                 }
@@ -185,57 +168,22 @@ class AddTripActivity: AppCompatActivity(){
         queue.add(jsonObjectRequest)
     }
 
-    private fun imageChooser() {
-        val i = Intent()
-        i.type = "image/*"
-        i.action = Intent.ACTION_GET_CONTENT
-        launchSomeActivity.launch(i)
-    }
-
     private var launchSomeActivity = registerForActivityResult<Intent, ActivityResult>(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
             val data: Intent? = result.data
-            if (data != null && data.data != null) {
-                selectedImageUri= data.data!!
-                img_uri = selectedImageUri.toString()
+            val selectedImageUri = data?.data
+            selectedImageUri?.let {
                 try {
-                    selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
-                    trip_img?.setImageBitmap(selectedImageBitmap)
-                    clicked = true
-                    file_path = saveToInternalStorage(selectedImageBitmap, selectedImageUri.toString())
+                    val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, it)
+                    trip_img.setImageBitmap(bitmap)
+                    file_path = saveToInternalStorage(bitmap, selectedImageUri.toString(), applicationContext)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
             }
         }
     }
-
-    private fun createFileName(uri:String):String {
-        val strings = uri.split("%")
-        return strings[strings.size - 1]
-    }
-
-    private fun saveToInternalStorage(bitmap:Bitmap, uri:String):String {
-        val root_dir: File = ContextWrapper(applicationContext).getDir("imageDir", Context.MODE_PRIVATE)
-        val fp = File(root_dir,createFileName(uri))
-        var fos: FileOutputStream? = null
-        try {
-            fos = FileOutputStream(fp)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-        } catch (e: Exception) {
-            Log.e("GlobeyApp", e.printStackTrace().toString())
-
-        } finally {
-            try {
-                fos?.close()
-            } catch (e:IOException) {
-                Log.e("GlobeyApp", e.printStackTrace().toString())
-            }
-        }
-        return fp.toString()
-    }
-
 }
 

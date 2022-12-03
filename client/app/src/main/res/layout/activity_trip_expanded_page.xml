@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".TripExpandedActivity">
 
-
-    <ImageView
+    <ImageButton
         android:id="@+id/trip_image_2"
         android:layout_width="match_parent"
         android:layout_height="300dp"
@@ -16,13 +15,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cabo_2"
-        android:contentDescription="@string/todo2" />
+        app:srcCompat="@drawable/trip_placeholder"
+        android:contentDescription="@string/trip_placeholder"/>
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="430dp"
+        android:layout_height="0dp"
         android:background="@drawable/white_list_background"
         android:clickable="false"
         android:focusableInTouchMode="true"
@@ -45,11 +44,14 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/trip_title"
+                <EditText
+                    android:id="@+id/trip_title2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:autofillHints="title of trip"
                     android:fontFamily="@font/rubik_bold"
+                    android:inputType="text"
+                    android:minWidth="48dp"
                     android:paddingBottom="15dp"
                     android:textSize="32sp" />
 
@@ -59,7 +61,8 @@
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
                     android:showText="false"
-                    android:text="Edit" />
+                    android:text="Edit"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
 
             <TextView
@@ -86,7 +89,7 @@
                     <EditText
                         android:id="@+id/location_expanded"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:ems="10"
                         android:importantForAutofill="no"
                         android:inputType="text" />
@@ -105,7 +108,7 @@
                     <EditText
                         android:id="@+id/start_expanded"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:autofillHints=""
                         android:ems="10"
                         android:inputType="date" />
@@ -125,7 +128,7 @@
                     <EditText
                         android:id="@+id/end_expanded"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:autofillHints=""
                         android:ems="10"
                         android:inputType="date" />
@@ -235,16 +238,16 @@
 
     <ImageButton
         android:id="@+id/back_btn"
-        android:layout_width="45dp"
-        android:layout_height="39dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:background="#071B0F0F"
+        android:contentDescription="@string/back_btn"
         android:foreground="@drawable/back__1_"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/trip_image_2"
-        tools:targetApi="m"
-        android:contentDescription="TODO" />
+        tools:targetApi="m" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

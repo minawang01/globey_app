@@ -1,17 +1,17 @@
 package APP_DESIGN_PROJECT.globeyapp
 
-import APP_DESIGN_PROJECT.globeyapp.tools.NoteRecyclerViewAdapter
-import APP_DESIGN_PROJECT.globeyapp.tools.Notes
-import APP_DESIGN_PROJECT.globeyapp.tools.Trips
+import APP_DESIGN_PROJECT.globeyapp.tools.*
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +25,7 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.io.IOException
 import kotlin.collections.ArrayList
 
 
@@ -33,76 +34,120 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
     private lateinit var edittext: EditText
     private lateinit var noteList: ArrayList<Notes>
     private lateinit var backBtn: ImageButton
-    private lateinit var title: TextView
+    private lateinit var title: EditText
     private lateinit var location: EditText
     private lateinit var start: EditText
     private lateinit var end: EditText
-    private lateinit var expandedTripImg: ImageView
+    private lateinit var expandedTripImg: ImageButton
+    private lateinit var toggle: Switch
+    private var file_path: String? = null
+    private var canEdit: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trip_expanded_page)
         edittext = findViewById(R.id.add_note)
-        title = findViewById(R.id.trip_title)
+
         location = findViewById(R.id.location_expanded)
         start = findViewById(R.id.start_expanded)
         end = findViewById(R.id.end_expanded)
         expandedTripImg = findViewById(R.id.trip_image_2)
+        toggle = findViewById(R.id.edit_switch)
+        backBtn = findViewById(R.id.back_btn)
+        title = findViewById(R.id.trip_title2)
+
 
 
 
         noteList = intent.getParcelableArrayListExtra("notes", Notes::class.java)!!
         val trip = intent.getParcelableExtra("trip", Trips::class.java)!!
-        val trip_id = trip.id
 
         adapter = NoteRecyclerViewAdapter(this, noteList)
         adapter.setFocusChangeListener(this)
-
         val recyclerView: RecyclerView = findViewById(R.id.notes_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        title.text = trip.name
+
+        title.setText(trip.name)
         location.setText(trip.location)
         start.setText(trip.start)
         end.setText(trip.end)
         trip.file_path?.let { retrieveFromStorage(expandedTripImg, it) }
 
         edittext.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
+            if (!hasFocus && canEdit) {
                 val text = edittext.text.trim().toString()
                 if(text.isNotEmpty()) {
-                    addNoteToDatabase(trip_id, text)
+                    addNoteToDatabase(trip.id, text)
                 }
             }
         }
 
         location.setOnFocusChangeListener {_, hasFocus ->
-            if (!hasFocus) {
-                changeTripInDatabase(trip_id, "LOCATION", location.text)
+            if (!hasFocus && canEdit) {
+                changeTripInDatabase(trip.id, "LOCATION", location.text.toString())
             }
 
         }
 
         start.setOnFocusChangeListener {_, hasFocus ->
-            if (!hasFocus) {
-                changeTripInDatabase(trip_id, "START_DATE", start.text)
+            if (!hasFocus && canEdit) {
+                changeTripInDatabase(trip.id, "START_DATE", start.text.toString())
             }
 
         }
 
         end.setOnFocusChangeListener {_, hasFocus ->
-            if (!hasFocus) {
-                changeTripInDatabase(trip_id, "END_DATE", end.text)
+            if (!hasFocus && canEdit) {
+                changeTripInDatabase(trip.id, "END_DATE", end.text.toString())
             }
         }
 
-        backBtn = findViewById(R.id.back_btn)
+        title.setOnFocusChangeListener{_, hasFocus ->
+            if(!hasFocus && canEdit) {
+                changeTripInDatabase(trip.id, "NAME", title.text.toString())
+            }
+        }
+
+        expandedTripImg.setOnClickListener {
+            if(canEdit) {
+                changeImage(trip.id, expandedTripImg)
+            }
+        }
 
         backBtn.setOnClickListener {
             switchToTrips()
         }
+
+
+
+        toggle.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
+            canEdit = isChecked
+        }
+    }
+
+    private fun changeImage(id: Int, tripImg: ImageButton) {
+        var launchSomeActivity = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                val selectedImageUri = data?.data
+                selectedImageUri?.let {
+                    try {
+                        val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, it)
+                        tripImg.setImageBitmap(bitmap)
+                        file_path = saveToInternalStorage(bitmap, selectedImageUri.toString(), applicationContext)
+                        changeTripInDatabase(id, "FILE_PATH", file_path.toString())
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
+        imageChooser(launchSomeActivity)
     }
 
     private fun retrieveFromStorage(tripImg: ImageView, file_path: String) {
@@ -198,7 +243,7 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
         Volley.newRequestQueue(this).add(jsonObjectRequest)
     }
 
-    private fun changeTripInDatabase(trip_id: Int, element:String, text: Editable) {
+    private fun changeTripInDatabase(trip_id: Int, element:String, text: String) {
         val postData = JSONObject()
         try {
             postData.put("text", text.toString())

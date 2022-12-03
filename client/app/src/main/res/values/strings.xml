@@ -20,4 +20,6 @@
     <string name="image_for_trip">Image for trip</string>
     <string name="button_to_discard_trip">Button to discard trip</string>
     <string name="button_to_confirm_trip">Button to confirm trip</string>
+    <string name="trip_placeholder">trip placeholder</string>
+    <string name="back_btn">TODO</string>
 </resources>

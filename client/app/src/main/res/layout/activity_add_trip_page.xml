@@ -51,19 +51,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
 
-                android:layout_marginTop="70dp"
-                android:layout_marginBottom="70dp"
+                android:layout_marginTop="20dp"
                 android:autofillHints=""
                 android:ems="10"
                 android:fontFamily="@font/roboto_bold"
                 android:inputType="textPersonName"
+                android:labelFor="@id/trip_name"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:text="@string/untitled_trip"
                 android:textAlignment="center"
                 android:textColor="#80070707"
                 android:textSize="34sp"
-                android:labelFor="@id/trip_name"
                 app:layout_constraintBottom_toTopOf="@+id/add_trip_img_btn"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -116,15 +115,15 @@
                     android:id="@+id/start_date"
                     android:layout_width="wrap_content"
                     android:layout_height="51dp"
+                    android:autofillHints="DD/MM/YYYY"
                     android:ems="10"
                     android:inputType="date"
+                    android:labelFor="@id/start_date"
                     android:text="@string/start_dd_mm_yyyy"
                     android:textAlignment="center"
                     android:textColor="#80070707"
                     android:textSize="20sp"
-                    tools:ignore="DuplicateSpeakableTextCheck"
-                    android:labelFor="@id/start_date"
-                    android:autofillHints="DD/MM/YYYY" />
+                    tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <EditText
                     android:id="@+id/end_date"
@@ -143,12 +142,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="100dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
                 android:gravity="center|center_horizontal"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout2">
 
                 <ImageButton
                     android:id="@+id/confirm_btn"
