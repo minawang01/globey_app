@@ -57,7 +57,6 @@ class AddTripActivity: AppCompatActivity(){
         trip_img?.bringToFront()
         trip_img?.setOnClickListener{
             imageChooser()
-            clicked = true
         }
 
         if(!clicked){
@@ -204,6 +203,7 @@ class AddTripActivity: AppCompatActivity(){
                 try {
                     selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
                     trip_img?.setImageBitmap(selectedImageBitmap)
+                    clicked = true
                     file_path = saveToInternalStorage(selectedImageBitmap, selectedImageUri.toString())
                 } catch (e: IOException) {
                     e.printStackTrace()
