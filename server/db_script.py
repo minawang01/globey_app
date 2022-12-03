@@ -8,10 +8,10 @@ con = sqlite3.connect('globey_app.db')
 #creates table
 con.execute("""CREATE TABLE IF NOT EXISTS TRIPS (
     ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    NAME TEXT NOT NULL,
-    LOCATION TEXT NOT NULL,
-    START_DATE TEXT NOT NULL,
-    END_DATE TEXT NOT NULL,
+    NAME TEXT,
+    LOCATION TEXT,
+    START_DATE TEXT,
+    END_DATE TEXT,
     FILE_PATH TEXT
     );""")
 
