@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+import com.captaindroid.tvg.Tvg
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
         button = findViewById(R.id.button)
         title = findViewById(R.id.app_name)
+
+        Tvg.change(title, Color.parseColor("#CA6884"),  Color.parseColor("#8AE9C1"))
 
         button!!.setOnClickListener {
             Log.e("GlobeyApp", "Add trip button was clicked")

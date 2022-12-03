@@ -1,6 +1,7 @@
 package APP_DESIGN_PROJECT.globeyapp
 
 import APP_DESIGN_PROJECT.globeyapp.tools.Trips
+import android.content.ContentResolver
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -31,7 +32,7 @@ import java.io.IOException
 import java.util.ArrayList
 
 
-class AddTripActivity: AppCompatActivity() {
+class AddTripActivity: AppCompatActivity(){
 
 
     private var confirm_btn: ImageButton? = null
@@ -41,6 +42,10 @@ class AddTripActivity: AppCompatActivity() {
     private var start_date: EditText? = null
     private var end_date: EditText? = null
     private var trip_img: ImageButton? = null
+    private var img_uri: String? = null
+    private var clicked: Boolean = false
+    private lateinit var selectedImageUri: Uri
+    private lateinit var selectedImageBitmap: Bitmap
     private var file_path: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,9 +56,23 @@ class AddTripActivity: AppCompatActivity() {
         trip_img = findViewById(R.id.add_trip_img_btn)
 
         trip_img?.bringToFront()
-        trip_img?.setOnClickListener {
+        trip_img?.setOnClickListener{
             imageChooser()
+            clicked = true
         }
+
+        if(!clicked){
+            selectedImageUri = Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(R.drawable.trip_placeholder))
+                .appendPath(resources.getResourceTypeName(R.drawable.trip_placeholder))
+                .appendPath(resources.getResourceEntryName(R.drawable.trip_placeholder))
+                .build()
+
+            selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
+            trip_img?.setImageBitmap(selectedImageBitmap)
+        }
+
         trip_img?.scaleType = ImageView.ScaleType.CENTER
 
         confirm_btn!!.setOnClickListener {
@@ -174,8 +193,8 @@ class AddTripActivity: AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             val data: Intent? = result.data
             if (data != null && data.data != null) {
-                val selectedImageUri: Uri? = data.data
-                val selectedImageBitmap: Bitmap
+                selectedImageUri= data.data!!
+                img_uri = selectedImageUri.toString()
                 try {
                     selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
                     trip_img?.setImageBitmap(selectedImageBitmap)

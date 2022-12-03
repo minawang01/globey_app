@@ -6,17 +6,15 @@
     android:layout_height="match_parent">
 
     <TextView
-
         android:id="@+id/app_name"
-
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="60dp"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="80dp"
         android:layout_marginTop="168dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginEnd="80dp"
         android:layout_marginBottom="-5dp"
-        android:fontFamily="@font/roboto_bold"
-        android:foreground="@drawable/globey"
+        android:fontFamily="@font/sansita"
+        android:text="GLOBEY"
         android:textAlignment="center"
         android:textSize="77sp"
         app:layout_constraintBottom_toTopOf="@id/button"
