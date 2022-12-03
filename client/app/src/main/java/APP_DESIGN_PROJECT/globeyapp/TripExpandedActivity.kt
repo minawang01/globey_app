@@ -9,7 +9,10 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.View.FOCUSABLE_AUTO
+import android.view.View.NOT_FOCUSABLE
 import android.widget.*
+import android.widget.ImageButton
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -27,6 +30,7 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 
 class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusChangeListener {
@@ -39,29 +43,28 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
     private lateinit var start: EditText
     private lateinit var end: EditText
     private lateinit var expandedTripImg: ImageButton
-    private lateinit var toggle: Switch
+    private lateinit var switch: Switch
+    private lateinit var trip: Trips
     private var file_path: String? = null
-    private var canEdit: Boolean = false
+    private var canEdit: Boolean = true
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trip_expanded_page)
         edittext = findViewById(R.id.add_note)
-
         location = findViewById(R.id.location_expanded)
         start = findViewById(R.id.start_expanded)
         end = findViewById(R.id.end_expanded)
-        expandedTripImg = findViewById(R.id.trip_image_2)
-        toggle = findViewById(R.id.edit_switch)
         backBtn = findViewById(R.id.back_btn)
-        title = findViewById(R.id.trip_title2)
-
-
+        expandedTripImg = findViewById(R.id.trip_image_2)
+        title = findViewById(R.id.trip_title)
+        switch = findViewById(R.id.edit_switch)
 
 
         noteList = intent.getParcelableArrayListExtra("notes", Notes::class.java)!!
-        val trip = intent.getParcelableExtra("trip", Trips::class.java)!!
+        trip = intent.getParcelableExtra("trip", Trips::class.java)!!
 
         adapter = NoteRecyclerViewAdapter(this, noteList)
         adapter.setFocusChangeListener(this)
@@ -113,7 +116,7 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
 
         expandedTripImg.setOnClickListener {
             if(canEdit) {
-                changeImage(trip.id, expandedTripImg)
+                imageChooser(launchSomeActivity)
             }
         }
 
@@ -121,15 +124,25 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
             switchToTrips()
         }
 
-
-
-        toggle.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
+        switch.setOnCheckedChangeListener {
+            compoundButton:CompoundButton, isChecked:Boolean ->
             canEdit = isChecked
+            if(isChecked) {
+                end.focusable = NOT_FOCUSABLE
+                location.focusable = NOT_FOCUSABLE
+                start.focusable = NOT_FOCUSABLE
+                title.focusable = NOT_FOCUSABLE
+            } else {
+                end.focusable = FOCUSABLE_AUTO
+                location.focusable = FOCUSABLE_AUTO
+                start.focusable = FOCUSABLE_AUTO
+                title.focusable = FOCUSABLE_AUTO
+            }
         }
     }
 
-    private fun changeImage(id: Int, tripImg: ImageButton) {
-        var launchSomeActivity = registerForActivityResult(
+    var launchSomeActivity =
+        registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
@@ -138,19 +151,17 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
                 selectedImageUri?.let {
                     try {
                         val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, it)
-                        tripImg.setImageBitmap(bitmap)
+                        expandedTripImg.setImageBitmap(bitmap)
                         file_path = saveToInternalStorage(bitmap, selectedImageUri.toString(), applicationContext)
-                        changeTripInDatabase(id, "FILE_PATH", file_path.toString())
+                        changeTripInDatabase(trip.id, "FILE_PATH", file_path.toString())
                     } catch (e: IOException) {
                         e.printStackTrace()
                     }
                 }
             }
         }
-        imageChooser(launchSomeActivity)
-    }
 
-    private fun retrieveFromStorage(tripImg: ImageView, file_path: String) {
+    private fun retrieveFromStorage(tripImg: ImageButton, file_path: String) {
         try {
             val f = File(file_path)
             val b: Bitmap = BitmapFactory.decodeStream(FileInputStream(f))
@@ -246,7 +257,7 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
     private fun changeTripInDatabase(trip_id: Int, element:String, text: String) {
         val postData = JSONObject()
         try {
-            postData.put("text", text.toString())
+            postData.put("text", text)
             postData.put("trip_id", trip_id)
             postData.put("element", element)
         } catch(e :Exception) {

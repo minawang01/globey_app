@@ -41,7 +41,7 @@ class AddTripActivity: AppCompatActivity(){
     private lateinit var start_date: EditText
     private lateinit var end_date: EditText
     private lateinit var trip_img: ImageButton
-    private var file_path: String? = null
+    private var file_path: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

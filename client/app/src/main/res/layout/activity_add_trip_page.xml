@@ -72,23 +72,21 @@
                 android:layout_height="300dp"
                 android:layout_marginBottom="50dp"
                 android:backgroundTint="#00FFFFFF"
+                android:contentDescription="@string/image_for_trip"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toTopOf="@+id/location"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/trip_name"
                 app:srcCompat="@drawable/add_image"
-                tools:ignore="SpeakableTextPresentCheck"
-                android:contentDescription="@string/image_for_trip" />
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <EditText
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="51dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="50dp"
-                android:ems="10"
+                android:autofillHints="Location"
                 android:inputType="text"
                 android:text="@string/location_of_trip"
                 android:textAlignment="center"
@@ -96,60 +94,52 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_trip_img_btn"
-                android:autofillHints="Location" />
+                app:layout_constraintTop_toBottomOf="@id/add_trip_img_btn" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|center_horizontal"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="horizontal"
+            <EditText
+                android:id="@+id/start_date"
+                android:layout_width="150dp"
+                android:layout_height="51dp"
+                android:autofillHints="DD/MM/YYYY"
+                android:ems="10"
+                android:inputType="date"
+                android:labelFor="@id/start_date"
+                android:text="@string/start_dd_mm_yyyy"
+                android:textAlignment="center"
+                android:textColor="#80070707"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/location">
+                app:layout_constraintTop_toBottomOf="@+id/location"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
-                <EditText
-                    android:id="@+id/start_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="51dp"
-                    android:autofillHints="DD/MM/YYYY"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:labelFor="@id/start_date"
-                    android:text="@string/start_dd_mm_yyyy"
-                    android:textAlignment="center"
-                    android:textColor="#80070707"
-                    android:textSize="20sp"
-                    tools:ignore="DuplicateSpeakableTextCheck" />
-
-                <EditText
-                    android:id="@+id/end_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="51dp"
-                    android:autofillHints="DD/MM/YYYY"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:text="@string/end_dd_mm_yyyy"
-                    android:textAlignment="center"
-                    android:textColor="#80070707"
-                    android:textSize="20sp"
-                    android:labelFor="@id/end_date"/>
-            </LinearLayout>
+            <EditText
+                android:id="@+id/end_date"
+                android:layout_width="150dp"
+                android:layout_height="51dp"
+                android:autofillHints="DD/MM/YYYY"
+                android:ems="10"
+                android:inputType="date"
+                android:labelFor="@id/end_date"
+                android:text="@string/end_dd_mm_yyyy"
+                android:textAlignment="center"
+                android:textColor="#80070707"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/start_date" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="19dp"
                 android:layout_marginBottom="50dp"
                 android:gravity="center|center_horizontal"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout2">
+                app:layout_constraintTop_toBottomOf="@id/end_date">
 
                 <ImageButton
                     android:id="@+id/confirm_btn"
