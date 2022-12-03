@@ -1,6 +1,7 @@
 package APP_DESIGN_PROJECT.globeyapp
 
 import APP_DESIGN_PROJECT.globeyapp.tools.Trips
+import APP_DESIGN_PROJECT.globeyapp.tools.checkDateValidity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -36,10 +37,10 @@ class AddTripActivity: AppCompatActivity() {
 
     private var confirm_btn: ImageButton? = null
     private var discard_btn: ImageButton? = null
-    private var trip_name: EditText? = null
-    private var trip_location: EditText? = null
-    private var start_date: EditText? = null
-    private var end_date: EditText? = null
+    private lateinit var trip_name: EditText
+    private lateinit var trip_location: EditText
+    private lateinit var start_date: EditText
+    private lateinit var end_date: EditText
     private var trip_img: ImageButton? = null
     private var file_path: String? = null
 
@@ -63,22 +64,29 @@ class AddTripActivity: AppCompatActivity() {
             end_date = findViewById(R.id.end_date)
 
 
-            val name: String = trip_name!!.text.toString()
-            val location: String = trip_location!!.text.toString()
-            val start: String = start_date!!.text.toString()
-            val end: String = end_date!!.text.toString()
+            val name: String = trip_name.text.toString()
+            val location: String = trip_location.text.toString()
+            val start: String = start_date.text.toString()
+            val end: String = end_date.text.toString()
 
-            val postData = JSONObject()
-            try {
-                postData.put("name", name)
-                postData.put("location", location)
-                postData.put("start", start)
-                postData.put("end", end)
-                postData.put("file_path", file_path)
-            } catch (e: JSONException) {
-                e.printStackTrace()
+            if (!checkDateValidity(start)) {
+                Toast.makeText(this.applicationContext, "Format of date must be DD/MM/YYYY", Toast.LENGTH_SHORT)
+
+            } else if (!checkDateValidity(end)) {
+
+            } else {
+                val postData = JSONObject()
+                try {
+                    postData.put("name", name)
+                    postData.put("location", location)
+                    postData.put("start", start)
+                    postData.put("end", end)
+                    postData.put("file_path", file_path)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+                sendMessage(postData)
             }
-            sendMessage(postData)
         }
 
         discard_btn!!.setOnClickListener {

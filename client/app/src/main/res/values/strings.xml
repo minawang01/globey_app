@@ -10,4 +10,14 @@
     <string name="location">Location:</string>
     <string name="notes">Notes</string>
     <string name="details">Details</string>
+    <string name="untitled_trip">Untitled Trip</string>
+    <string name="dd_mm_yyyy">DD/MM/YYYY</string>
+    <string name="start_dd_mm_yyyy">Start: DD/MM/YYYY</string>
+    <string name="end_dd_mm_yyyy">End: DD/MM/YYYY</string>
+    <string name="location_of_trip">Location</string>
+    <string name="background_for_layout">Background for layout</string>
+    <string name="background_for_layout_2">Background for layout</string>
+    <string name="image_for_trip">Image for trip</string>
+    <string name="button_to_discard_trip">Button to discard trip</string>
+    <string name="button_to_confirm_trip">Button to confirm trip</string>
 </resources>
