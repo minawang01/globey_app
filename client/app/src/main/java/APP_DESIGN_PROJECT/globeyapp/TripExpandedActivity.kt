@@ -9,14 +9,15 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.view.View.FOCUSABLE_AUTO
-import android.view.View.NOT_FOCUSABLE
+import android.view.View.*
 import android.widget.*
 import android.widget.ImageButton
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -45,6 +46,7 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
     private lateinit var expandedTripImg: ImageButton
     private lateinit var switch: Switch
     private lateinit var trip: Trips
+    private lateinit var scrollView: ScrollView
     private var file_path: String? = null
     private var canEdit: Boolean = true
 
@@ -61,6 +63,7 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
         expandedTripImg = findViewById(R.id.trip_image_2)
         title = findViewById(R.id.trip_title)
         switch = findViewById(R.id.edit_switch)
+        scrollView = findViewById(R.id.scrollView2)
 
 
         noteList = intent.getParcelableArrayListExtra("notes", Notes::class.java)!!
@@ -80,7 +83,7 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
         trip.file_path?.let { retrieveFromStorage(expandedTripImg, it) }
 
         edittext.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus && canEdit) {
+            if (!hasFocus) {
                 val text = edittext.text.trim().toString()
                 if(text.isNotEmpty()) {
                     addNoteToDatabase(trip.id, text)
@@ -89,28 +92,45 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
         }
 
         location.setOnFocusChangeListener {_, hasFocus ->
-            if (!hasFocus && canEdit) {
-                changeTripInDatabase(trip.id, "LOCATION", location.text.toString())
+            if (!hasFocus) {
+                changeTripInDatabase(trip.id, "LOCATION", location.text.trim().toString())
             }
 
         }
 
         start.setOnFocusChangeListener {_, hasFocus ->
-            if (!hasFocus && canEdit) {
-                changeTripInDatabase(trip.id, "START_DATE", start.text.toString())
+            val validDate = checkDateValidity(start.text.toString())
+            if (!hasFocus) {
+                if (validDate) {
+                    changeTripInDatabase(trip.id, "START_DATE", start.text.trim().toString())
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "Date format must be DD/MM/YYYY or blank",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-
         }
 
         end.setOnFocusChangeListener {_, hasFocus ->
-            if (!hasFocus && canEdit) {
-                changeTripInDatabase(trip.id, "END_DATE", end.text.toString())
+            val validDate = checkDateValidity(end.text.toString())
+            if (!hasFocus) {
+                if (validDate) {
+                    changeTripInDatabase(trip.id, "END_DATE", end.text.trim().toString())
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "Date format must be DD/MM/YYYY or blank",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
         title.setOnFocusChangeListener{_, hasFocus ->
-            if(!hasFocus && canEdit) {
-                changeTripInDatabase(trip.id, "NAME", title.text.toString())
+            if(!hasFocus) {
+                changeTripInDatabase(trip.id, "NAME", title.text.trim().toString())
             }
         }
 
@@ -121,22 +141,31 @@ class TripExpandedActivity : AppCompatActivity(), NoteRecyclerViewAdapter.FocusC
         }
 
         backBtn.setOnClickListener {
-            switchToTrips()
+            if(!checkDateValidity(end.text.toString()) || !checkDateValidity(start.text.toString())) {
+                Toast.makeText(
+                    applicationContext,
+                    "Date format must be DD/MM/YYYY or blank",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                switchToTrips()
+            }
         }
 
         switch.setOnCheckedChangeListener {
             compoundButton:CompoundButton, isChecked:Boolean ->
             canEdit = isChecked
+            Toast.makeText(applicationContext, "Can edit: $isChecked", Toast.LENGTH_SHORT).show()
             if(isChecked) {
+                location.isFocusableInTouchMode = true
+                end.isFocusableInTouchMode = true
+                start.isFocusableInTouchMode = true
+                title.isFocusableInTouchMode = true
+            } else {
                 end.focusable = NOT_FOCUSABLE
                 location.focusable = NOT_FOCUSABLE
                 start.focusable = NOT_FOCUSABLE
                 title.focusable = NOT_FOCUSABLE
-            } else {
-                end.focusable = FOCUSABLE_AUTO
-                location.focusable = FOCUSABLE_AUTO
-                start.focusable = FOCUSABLE_AUTO
-                title.focusable = FOCUSABLE_AUTO
             }
         }
     }

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/expanded_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TripExpandedActivity">
@@ -10,13 +11,13 @@
         android:id="@+id/trip_image_2"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:contentDescription="@string/trip_placeholder"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/trip_placeholder"
-        android:contentDescription="@string/trip_placeholder"/>
+        app:srcCompat="@drawable/trip_placeholder" />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -52,6 +53,7 @@
                     android:fontFamily="@font/rubik_bold"
                     android:inputType="text"
                     android:minWidth="48dp"
+                    android:focusableInTouchMode="false"
                     android:paddingBottom="15dp"
                     android:textSize="32sp" />
 
@@ -91,6 +93,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:ems="10"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:importantForAutofill="no"
                         android:inputType="text" />
 
@@ -111,6 +115,7 @@
                         android:layout_height="50dp"
                         android:autofillHints=""
                         android:ems="10"
+                        android:focusableInTouchMode="false"
                         android:inputType="date" />
 
                 </TableRow>
@@ -131,6 +136,7 @@
                         android:layout_height="50dp"
                         android:autofillHints=""
                         android:ems="10"
+                        android:focusableInTouchMode="false"
                         android:inputType="date" />
 
                 </TableRow>

@@ -13,10 +13,12 @@ def trips():
     if request.method == 'POST':
         print("request method is post")
         trip = request.get_json()
+
         name, loc, start, end, file_path = trip["name"], trip["location"], trip["start"], trip["end"], trip["file_path"]
         insertQuery = "INSERT INTO TRIPS (NAME, LOCATION, START_DATE, END_DATE, FILE_PATH) values (?,?,?,?,?);"
         con.execute(insertQuery, (name,loc,start,end, file_path))
         con.commit()
+
 
     cursor = con.execute("SELECT * from TRIPS;")
     trips = []

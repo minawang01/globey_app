@@ -53,16 +53,6 @@ class TripsActivity : AppCompatActivity(), RecyclerViewAdapter.ItemClickListener
         startActivity(intent)
     }
 
-    private fun getCountdown(date:String):Long {
-        val dateArray = date.split("/")
-        val startDate = Date(dateArray[2].toInt(), dateArray[1].toInt(), dateArray[0].toInt())
-        val startDateMillis = startDate.time
-        val cal = Calendar.getInstance()
-        val currentDate = cal.timeInMillis
-        val diff:Long = startDateMillis - currentDate
-        return TimeUnit.MILLISECONDS.toDays(diff);
-    }
-
     override fun onItemClick(view: View?, position: Int) {
         getNotesFromDatabase(position)
     }

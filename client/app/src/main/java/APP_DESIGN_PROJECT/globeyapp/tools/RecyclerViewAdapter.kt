@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class RecyclerViewAdapter(context: Context, data: List<Trips>, cr: ContentResolver):
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
@@ -51,7 +54,7 @@ class RecyclerViewAdapter(context: Context, data: List<Trips>, cr: ContentResolv
         } else {
             retrieveFromStorage(holder.imgBtn, trip.file_path)
         }
-
+        holder.countdown.text = trip.start?.let { "${getCountdown(it)} days" }
     }
 
     override fun getItemCount(): Int {
@@ -67,6 +70,20 @@ class RecyclerViewAdapter(context: Context, data: List<Trips>, cr: ContentResolv
             Log.e("GlobeyApp", e.printStackTrace().toString())
             setDefaultImage(imgBtn, mContext, this.contentResolver)
         }
+    }
+
+    private fun getCountdown(date:String):Long {
+        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        val startDate = sdf.parse(date)
+        val startDateMillis = startDate.time
+        Log.i("GlobeyApp", "Start $startDateMillis")
+
+        val cal = Calendar.getInstance()
+        val currentDate = cal.timeInMillis
+        Log.i("GlobeyApp", "Current $currentDate")
+        val diff:Long = startDateMillis - currentDate
+        Log.i("GlobeyApp", "diff $diff")
+        return TimeUnit.MILLISECONDS.toDays(diff);
     }
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
